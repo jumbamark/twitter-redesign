@@ -1,0 +1,16 @@
+{% extends 'tweets/base.html' %}
+
+{% load static %}
+
+{% block title %}
+Twitter Redesign | Home
+{% endblock title%}
+
+{% block content %}
+
+<div id="tweets">
+    <h1>Tweets</h1>
+</div>
+
+<script src="{% static 'tweets/js/home.js' %}"></script>
+{% endblock content %}
