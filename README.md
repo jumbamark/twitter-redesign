@@ -4,11 +4,11 @@ A project that tests Django and React knowledge through a twitter-like web appli
 
 ## Build With
 
-- Python -v 3.8.10
-- Django -v 4.0.2
+- Python v3.8.10
+- Django v4.0.2
 - DjangoRestFramework
 - React
-- Bootstrap
+- Bootstrap v5.1
 - PostgresQL
 
 ## Live Demo
