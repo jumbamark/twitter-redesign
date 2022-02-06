@@ -37,7 +37,7 @@ const tweetsElement = document.getElementById("tweets");
 
 function formatTweetElement(tweet) {
   let formattedTweet =
-    "<div class='mb-4 tweet' id='tweet- " +
+    "<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4 tweet' id='tweet- " +
     tweet.id +
     " '><p>" +
     tweet.content +
