@@ -2,11 +2,23 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponse, JsonResponse
 from .models import Tweet
 import random
+from .forms import TweetForm
 
 
 # Create your views here.
 def home_view(request, *args,**kwargs):
     return render(request, "tweets/home.html")
+
+# view that creates tweets
+def tweet_create_view(request, *args, **kwargs):
+    form = TweetForm(request.POST or None) #TweetForm class can be initialized with data or not
+    print("post data is: ", request.POST)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        # do other form related logic
+        obj.save()
+        form = TweetForm() #re-initialize a new blank form
+    return render(request, "tweets/components/tweet_create_form.html", context={"Form": form})
 
 def tweets_list_view(request, *args,**kwargs):
     querysets = Tweet.objects.all()
