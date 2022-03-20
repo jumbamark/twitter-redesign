@@ -1,51 +1,50 @@
-// using  XMLHttpRequest to issue HTTP requests-to exchange data between the site and a server.
-const xhr = new XMLHttpRequest();
-const method = "GET";
-const url = "/tweets";
-const responseType = "json";
+// Dynamically render the html from javascript
+const tweets_Element = document.getElementById("tweets");
 
-// specitying what type of data the response contains
-xhr.responseType = responseType;
+const loadTweets = function(tweetsElement) {
+  // using  XMLHttpRequest to issue HTTP requests-to exchange data between the site and a server.
+  const xhr = new XMLHttpRequest();
+  const method = "GET";
+  const url = "/tweets";
+  const responseType = "json";
 
-// initializing requests
-xhr.open(method, url);
+  // specitying what type of data the response contains
+  xhr.responseType = responseType;
 
-// function called when xhr transaction completes successfully.
-xhr.onload = () => {
-  // Do something with the retrieved data ( found in xhr.response )
-  console.log(xhr.response);
-  const tweets_list = xhr.response.response;
-  console.log(tweets_list);
-  let finalTweetStri = "";
+  // initializing requests
+  xhr.open(method, url);
 
-  for (let i = 0; i < tweets_list.length; i++) {
-    console.log(i);
-    console.log(tweets_list[i]);
-    tweetObj = tweets_list[i];
-    let currentItem = formatTweetElement(tweetObj);
-    finalTweetStri += currentItem;
-  }
+  // function called when xhr transaction completes successfully.
+  xhr.onload = () => {
+    // Do something with the retrieved data ( found in xhr.response )
+    console.log(xhr.response);
+    const tweets_list = xhr.response.response;
+    console.log(tweets_list);
+    let finalTweetStri = "";
 
-  tweetsElement.innerHTML = finalTweetStri;
+    for (let i = 0; i < tweets_list.length; i++) {
+      console.log(i);
+      console.log(tweets_list[i]);
+      tweetObj = tweets_list[i];
+      let currentItem = formatTweetElement(tweetObj);
+      finalTweetStri += currentItem;
+    }
+
+    tweetsElement.innerHTML = finalTweetStri;
+  };
+
+  //  sending the request to the server
+  xhr.send();
+}
+
+// calling the function to load tweets to the home.html page
+loadTweets(tweets_Element);
+
+
+const handleDidLike = (tweet_id, currentCount) => {
+  console.log(tweet_id, currentCount);
 };
 
-//  sending the request to the server
-xhr.send();
-
-// Dynamically render the html from javascript
-const tweetsElement = document.getElementById("tweets");
-
-function formatTweetElement(tweet) {
-  let formattedTweet =
-    "<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4 tweet' id='tweet- " +
-    tweet.id +
-    " '><p>" +
-    tweet.content +
-    "</p><div class='btn-group'>" +
-    LikeBtn(tweet) +
-    "</div></div>";
-  return formattedTweet;
-}
 
 function LikeBtn(tweet) {
   return (
@@ -59,6 +58,15 @@ function LikeBtn(tweet) {
   );
 }
 
-const handleDidLike = (tweet_id, currentCount) => {
-  console.log(tweet_id, currentCount);
-};
+
+function formatTweetElement(tweet) {
+  let formattedTweet =
+    "<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4 tweet' id='tweet- " +
+    tweet.id +
+    " '><p>" +
+    tweet.content +
+    "</p><div class='btn-group'>" +
+    LikeBtn(tweet) +
+    "</div></div>";
+  return formattedTweet;
+}
