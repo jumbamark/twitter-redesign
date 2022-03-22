@@ -1,6 +1,18 @@
 // Dynamically render the html from javascript
 const tweets_Element = document.getElementById("tweets");
 
+// Grabbing the form element by its id
+const tweetCreateForm_Element = document.getElementById("tweet-create-form")
+
+// callback that listens for submit event on the create-tweet form
+const handleTweetCreateFormDidSubmit = (event) => {
+  event.preventDefault();
+  console.log(event);
+}
+
+// Adding an event listener to the form
+tweetCreateForm_Element.addEventListener("submit", handleTweetCreateFormDidSubmit)
+
 const loadTweets = function(tweetsElement) {
   // using  XMLHttpRequest to issue HTTP requests-to exchange data between the site and a server.
   const xhr = new XMLHttpRequest();
@@ -45,7 +57,6 @@ const handleDidLike = (tweet_id, currentCount) => {
   console.log(tweet_id, currentCount);
 };
 
-
 function LikeBtn(tweet) {
   return (
     "<button class='btn btn-primary btn-sm' onclick=handleDidLike(" +
@@ -70,3 +81,4 @@ function formatTweetElement(tweet) {
     "</div></div>";
   return formattedTweet;
 }
+
