@@ -27,7 +27,10 @@ const handleTweetCreateFormDidSubmit = (event) => {
       console.log(newTweet, xhr.status);
       const newTweetJson = JSON.parse(newTweet);
       const newTweetElement = formatTweetElement(newTweetJson);
-      console.log(newTweetElement);
+      // console.log(newTweetElement);
+      const prev_Html = tweetsContainerElement.innerHTML;
+      tweetsContainerElement.innerHTML = newTweetElement + prev_Html;
+      myForm.reset(); // reserting target form after submitting
     }
   };
   // sending form data to the server
