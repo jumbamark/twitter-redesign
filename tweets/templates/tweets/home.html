@@ -17,7 +17,7 @@ Twitter Redesign | Home
 <!-- tweet_create_view -->
 <div class="row mb-3">
     <div class="col-md-4 mx-auto col-10">
-        <form action="/create-tweet" method="POST" class="form">
+        <form action="/create-tweet" method="POST" class="form" id="tweet-create-form">
             {% csrf_token %}
             <input type="hidden" value="/" name="next"> <!-- redirect that we want to handle -->
             <textarea name="content" class="form-control" placeholder="Your tweet"></textarea>
