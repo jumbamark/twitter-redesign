@@ -1,17 +1,39 @@
-// Dynamically render the html from javascript
-const tweets_Element = document.getElementById("tweets");
-
-// Grabbing the form element by its id
+// Grabbing the create -tweet form element by its id
 const tweetCreateForm_Element = document.getElementById("tweet-create-form")
 
 // callback that listens for submit event on the create-tweet form
 const handleTweetCreateFormDidSubmit = (event) => {
   event.preventDefault();
-  console.log(event);
+  console.log(event.target);
+  const myForm = event.target;
+  const myFormData = new FormData(myForm);
+  for (var myItem of myFormData.entries()) {
+    console.log(myItem);  // key vale pairs related to every single input in the form
+    console.log(myForm.getAttribute("action"));
+    const url = myForm.getAttribute("action");
+    const method = myForm.getAttribute("method");
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+
+    xhr.onload = function() {
+      const serverResponse = xhr.response
+      console.log(serverResponse);
+
+      // reload the tweets after it successfully loads
+      const tweets_Element = document.getElementById("tweets");
+      loadTweets(tweets_Element);
+    }
+    // sending form data to the server
+    xhr.send(myFormData)
+  }
 }
 
 // Adding an event listener to the form
 tweetCreateForm_Element.addEventListener("submit", handleTweetCreateFormDidSubmit)
+
+
+// Dynamically render the html from javascript
+const tweets_Element = document.getElementById("tweets");
 
 const loadTweets = function(tweetsElement) {
   // using  XMLHttpRequest to issue HTTP requests-to exchange data between the site and a server.
@@ -35,8 +57,8 @@ const loadTweets = function(tweetsElement) {
     let finalTweetStri = "";
 
     for (let i = 0; i < tweets_list.length; i++) {
-      console.log(i);
-      console.log(tweets_list[i]);
+      // console.log(i);
+      // console.log(tweets_list[i]);
       tweetObj = tweets_list[i];
       let currentItem = formatTweetElement(tweetObj);
       finalTweetStri += currentItem;
