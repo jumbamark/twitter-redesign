@@ -22,11 +22,13 @@ const handleTweetCreateFormDidSubmit = (event) => {
   xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
 
   xhr.onload = function () {
-    const serverResponse = xhr.response;
-    console.log(serverResponse, xhr.status);
-    // reload the tweets after it successfully loads
-    const tweets_Element = document.getElementById("tweets");
-    loadTweets(tweets_Element);
+    if (xhr.status === 201){
+      const newTweet = xhr.response;
+      console.log(newTweet, xhr.status);
+      const newTweetJson = JSON.parse(newTweet);
+      const newTweetElement = formatTweetElement(newTweetJson);
+      console.log(newTweetElement);
+    }
   };
   // sending form data to the server
   xhr.send(myFormData);
@@ -37,7 +39,7 @@ tweetCreateForm_Element.addEventListener("submit", handleTweetCreateFormDidSubmi
 
 
 // Dynamically render the html from javascript
-const tweets_Element = document.getElementById("tweets");
+const tweetsContainerElement = document.getElementById("tweets");
 
 const loadTweets = function(tweetsElement) {
   // using  XMLHttpRequest to issue HTTP requests-to exchange data between the site and a server.
@@ -76,9 +78,9 @@ const loadTweets = function(tweetsElement) {
 }
 
 // calling the function to load tweets to the home.html page
-loadTweets(tweets_Element);
+loadTweets(tweetsContainerElement);
 
-
+// Like Button functionality
 const handleDidLike = (tweet_id, currentCount) => {
   console.log(tweet_id, currentCount);
 };
