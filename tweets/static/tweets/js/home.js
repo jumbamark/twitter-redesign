@@ -16,9 +16,14 @@ const handleTweetCreateFormDidSubmit = (event) => {
   const method = myForm.getAttribute("method");
   const xhr = new XMLHttpRequest();
   xhr.open(method, url);
+
+  // setting ajax headers 
+  xhr.setRequestHeader("HTTP_X_REQUESTED_WITH","XMLHttpRequest");
+  xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
+
   xhr.onload = function () {
     const serverResponse = xhr.response;
-    console.log(serverResponse);
+    console.log(serverResponse, xhr.status);
     // reload the tweets after it successfully loads
     const tweets_Element = document.getElementById("tweets");
     loadTweets(tweets_Element);
