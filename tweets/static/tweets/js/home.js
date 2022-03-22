@@ -8,24 +8,23 @@ const handleTweetCreateFormDidSubmit = (event) => {
   const myForm = event.target;
   const myFormData = new FormData(myForm);
   for (var myItem of myFormData.entries()) {
-    console.log(myItem);  // key vale pairs related to every single input in the form
-    console.log(myForm.getAttribute("action"));
-    const url = myForm.getAttribute("action");
-    const method = myForm.getAttribute("method");
-    const xhr = new XMLHttpRequest();
-    xhr.open(method, url);
-
-    xhr.onload = function() {
-      const serverResponse = xhr.response
-      console.log(serverResponse);
-
-      // reload the tweets after it successfully loads
-      const tweets_Element = document.getElementById("tweets");
-      loadTweets(tweets_Element);
-    }
-    // sending form data to the server
-    xhr.send(myFormData)
+    console.log(myItem);
   }
+  console.log(myForm.getAttribute("action"));
+  // Figure out where the form is going to be send
+  const url = myForm.getAttribute("action");
+  const method = myForm.getAttribute("method");
+  const xhr = new XMLHttpRequest();
+  xhr.open(method, url);
+  xhr.onload = function () {
+    const serverResponse = xhr.response;
+    console.log(serverResponse);
+    // reload the tweets after it successfully loads
+    const tweets_Element = document.getElementById("tweets");
+    loadTweets(tweets_Element);
+  };
+  // sending form data to the server
+  xhr.send(myFormData);
 }
 
 // Adding an event listener to the form
