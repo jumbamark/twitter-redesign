@@ -19,6 +19,10 @@ def tweet_create_view(request, *args, **kwargs):
         obj = form.save(commit=False)
         # do other form related logic
         obj.save()
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({}, status=201) # 201 == creted items
+
         if next_url != None:
             return redirect(next_url)
         form = TweetForm() #re-initialize a new blank form
