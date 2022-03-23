@@ -22,7 +22,7 @@ const handleTweetCreateFormDidSubmit = (event) => {
   xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
 
   xhr.onload = function () {
-    if (xhr.status === 201){
+    if (xhr.status === 201) {
       const newTweet = xhr.response;
       console.log(newTweet, xhr.status);
       const newTweetJson = JSON.parse(newTweet);
@@ -31,7 +31,10 @@ const handleTweetCreateFormDidSubmit = (event) => {
       const prev_Html = tweetsContainerElement.innerHTML;
       tweetsContainerElement.innerHTML = newTweetElement + prev_Html;
       myForm.reset(); // reserting target form after submitting
-    }
+    } else if (xhr.status === 400) {
+      const errorJson = xhr.response;
+      console.log(errorJson);
+    };
   };
   // sending form data to the server
   xhr.send(myFormData);
