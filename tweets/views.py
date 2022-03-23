@@ -25,6 +25,9 @@ def tweet_create_view(request, *args, **kwargs):
         if next_url != None:
             return redirect(next_url)
         form = TweetForm() #re-initialize a new blank form
+        if form.erros:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse(form.errors, status=400)
     return render(request, "tweets/components/tweet_create_form.html", context={"Form": form})
 
 def tweets_list_view(request, *args,**kwargs):
