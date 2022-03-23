@@ -36,6 +36,10 @@ const handleTweetCreateFormDidSubmit = (event) => {
       console.log(errorJson);
     };
   };
+  // handling errors on the js side
+  xhr.onerror = function() {
+    alert("An error occured. Please try again later")
+  }
   // sending form data to the server
   xhr.send(myFormData);
 }
