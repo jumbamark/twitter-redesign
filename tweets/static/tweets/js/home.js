@@ -38,7 +38,8 @@ const handleTweetCreateFormDidSubmit = (event) => {
   xhr.onload = function () {
     if (xhr.status === 201) {
       // If there's no error message, toggles it to make it hidden
-      handleTweetFormError("", false)
+      handleTweetFormError("", false);
+      
       const newTweet = xhr.response;
       console.log(newTweet, xhr.status);
       const newTweetJson = JSON.parse(newTweet);
@@ -61,14 +62,17 @@ const handleTweetCreateFormDidSubmit = (event) => {
           // If there is an error message
           handleTweetFormError(contentErrorMsg, true);
         } else {
-          alert("An error occured")
+          alert("An error occured");
         }
       } else {
-        alert("An error occured. Please try again.")
+        alert("An error occured. Please try again.");
       }
       // console.log(contentErrorMsg);
+    } else if (xhr.status === 401) {
+      alert("You must login");
+      window.location.href = "/login"
     } else if (xhr.status === 500) {
-      alert("There was a server error, please try again")
+      alert("There was a server error, please try again");
     };
   };
   // handling errors on the js side
