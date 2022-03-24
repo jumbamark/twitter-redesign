@@ -37,6 +37,8 @@ const handleTweetCreateFormDidSubmit = (event) => {
 
   xhr.onload = function () {
     if (xhr.status === 201) {
+      // If there's no error message, toggles it to make it hidden
+      handleTweetFormError("", false)
       const newTweet = xhr.response;
       console.log(newTweet, xhr.status);
       const newTweetJson = JSON.parse(newTweet);
@@ -56,6 +58,7 @@ const handleTweetCreateFormDidSubmit = (event) => {
       if (contentError) {
         contentErrorMsg = contentError[0];
         if (contentErrorMsg) {
+          // If there is an error message
           handleTweetFormError(contentErrorMsg, true);
         } else {
           alert("An error occured")
