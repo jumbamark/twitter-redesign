@@ -1,6 +1,20 @@
 // Grabbing the create -tweet form element by its id
 const tweetCreateForm_Element = document.getElementById("tweet-create-form")
 
+
+// Rendering the create-tweet form error message
+const handleTweetFormError = (msg, display) => {
+  var myErrorDiv = document.getElementById("tweet-create-form-error")
+  if (display === true) {
+    // show error
+    myErrorDiv.setAttribute("class", "d-block alert alert-danger");
+    myErrorDiv.innerText = msg;
+  } else {
+    // hide error
+    myErrorDiv.setAttribute("class", "d-none alert alert-danger")
+  }
+}
+
 // callback that listens for submit event on the create-tweet form
 const handleTweetCreateFormDidSubmit = (event) => {
   event.preventDefault();
@@ -33,14 +47,30 @@ const handleTweetCreateFormDidSubmit = (event) => {
       myForm.reset(); // reserting target form after submitting
     } else if (xhr.status === 400) {
       const errorJson = xhr.response;
-      console.log(errorJson);
+      // console.log(errorJson);
+
+      // Rendering the error message
+      const error_Json = JSON.parse(errorJson);
+      const contentError = error_Json.content;
+      let contentErrorMsg;
+      if (contentError) {
+        contentErrorMsg = contentError[0];
+        if (contentErrorMsg) {
+          handleTweetFormError(contentErrorMsg, true);
+        } else {
+          alert("An error occured")
+        }
+      } else {
+        alert("An error occured. Please try again.")
+      }
+      // console.log(contentErrorMsg);
     } else if (xhr.status === 500) {
       alert("There was a server error, please try again")
     };
   };
   // handling errors on the js side
   xhr.onerror = function() {
-    alert("An error occured. Please try again later")
+    alert("A major error occured. Please try again later")
   }
   // sending form data to the server
   xhr.send(myFormData);

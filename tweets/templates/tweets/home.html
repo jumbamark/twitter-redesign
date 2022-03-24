@@ -19,6 +19,7 @@ Twitter Redesign | Home
     <div class="col-md-4 mx-auto col-10">
         <form action="/create-tweet" method="POST" class="form" id="tweet-create-form">
             {% csrf_token %}
+            <div class="d-none alert alert-danger" id="tweet-create-form-error"></div>
             <input type="hidden" value="/" name="next"> <!-- redirect that we want to handle -->
             <textarea required="required" name="content" class="form-control" placeholder="Your tweet"></textarea>
             <button type="submit" class="btn btn-primary">Tweet</button>
