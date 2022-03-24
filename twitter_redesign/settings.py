@@ -31,6 +31,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
+# changing the default value of the login url
+LOGIN_URL = "/login"
 
 
 # Application definition
