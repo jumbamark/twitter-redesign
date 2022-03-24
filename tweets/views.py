@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirect
+from django.conf import settings
 from .models import Tweet
 from .forms import TweetForm
+
 
 
 # Create your views here.
@@ -10,6 +12,11 @@ def home_view(request, *args,**kwargs):
 
 # view that creates tweets
 def tweet_create_view(request, *args, **kwargs):
+    if not request.user.is_authenticated:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({}, status=401)
+        return redirect(settings.LOGIN_URL)
+
     form = TweetForm(request.POST or None) #TweetForm class can be initialized with data or not
     print("post data is: ", request.POST)
     next_url = request.POST.get("next") or None
