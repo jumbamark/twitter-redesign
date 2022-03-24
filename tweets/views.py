@@ -12,7 +12,9 @@ def home_view(request, *args,**kwargs):
 
 # view that creates tweets
 def tweet_create_view(request, *args, **kwargs):
+    user = request.user
     if not request.user.is_authenticated:
+        user = None
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({}, status=401)
         return redirect(settings.LOGIN_URL)
@@ -24,6 +26,7 @@ def tweet_create_view(request, *args, **kwargs):
     if form.is_valid():
         obj = form.save(commit=False)
         # do other form related logic
+        obj.user = user
         obj.save()
 
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
