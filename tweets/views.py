@@ -3,15 +3,28 @@ from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirec
 from django.conf import settings
 from .models import Tweet
 from .forms import TweetForm
-
+from .serializers import TweetSerializer
 
 
 # Create your views here.
 def home_view(request, *args,**kwargs):
     return render(request, "tweets/home.html")
 
-# view that creates tweets
+# tweet create view using the serializer
 def tweet_create_view(request, *args, **kwargs):
+    serializer = TweetSerializer(data=request.POST or None)
+    if serializer.is_valid():
+        obj = serializer.save(user=request.user)
+        print(obj)
+        return JsonResponse(serializer.data, status=201)
+    return JsonResponse({}, status=400)
+
+# view that creates tweets
+def tweet_create_view_pure_django(request, *args, **kwargs):
+    '''
+    REST API Create View
+    '''
+    
     user = request.user
     if not request.user.is_authenticated:
         user = None
