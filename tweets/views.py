@@ -4,7 +4,9 @@ from django.conf import settings
 
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .serializers import TweetSerializer
 from .models import Tweet
 from .forms import TweetForm
@@ -17,6 +19,8 @@ def home_view(request, *args,**kwargs):
 
 # tweet create view based on serializers
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated]) # if they are authenticated they'll have access to this view otherwise they won't
 def tweet_create_view(request, *args, **kwargs):
     serializer = TweetSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):
@@ -39,10 +43,11 @@ def tweets_list_view(request, *args, **kwargs):
 def tweet_detail_view(request, tweet_id, *args, **kwargs):
     queryset = Tweet.objects.filter(id=tweet_id)
     if not queryset.exists():
-        return Response({f"post with id: {tweet_id} was not found"}, status=status.HTTP_404_NOT_FOUND,)
+        return Response({"detail":f"Tweet with id {tweet_id} was not found"}, status=status.HTTP_404_NOT_FOUND,)
     obj = queryset.first()
     serializer = TweetSerializer(obj)
     return Response(serializer.data)
+
 
 
 # Views based on pure django
