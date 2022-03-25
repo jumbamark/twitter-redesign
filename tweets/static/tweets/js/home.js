@@ -107,8 +107,7 @@ const loadTweets = function(tweetsElement) {
   xhr.onload = () => {
     // Do something with the retrieved data ( found in xhr.response )
     console.log(xhr.response);
-    const tweets_list = xhr.response.response;
-    console.log(tweets_list);
+    const tweets_list = xhr.response;
     let finalTweetStri = "";
 
     for (let i = 0; i < tweets_list.length; i++) {
