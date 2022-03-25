@@ -1,25 +1,52 @@
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirect
 from django.conf import settings
+
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
+from .serializers import TweetSerializer
 from .models import Tweet
 from .forms import TweetForm
-from .serializers import TweetSerializer
 
 
 # Create your views here.
 def home_view(request, *args,**kwargs):
     return render(request, "tweets/home.html")
 
-# tweet create view using the serializer
+
+# tweet create view based on serializers
+@api_view(['POST'])
 def tweet_create_view(request, *args, **kwargs):
-    serializer = TweetSerializer(data=request.POST or None)
-    if serializer.is_valid():
+    serializer = TweetSerializer(data=request.POST)
+    if serializer.is_valid(raise_exception=True):
         obj = serializer.save(user=request.user)
         print(obj)
-        return JsonResponse(serializer.data, status=201)
-    return JsonResponse({}, status=400)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# view that creates tweets
+
+# tweet_list_view based on serializers
+@api_view(['GET'])
+def tweets_list_view(request, *args, **kwargs):
+    queryset = Tweet.objects.all()
+    serializer = TweetSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+# tweet_detail_view based on serializers
+@api_view(['GET'])
+def tweet_detail_view(request, tweet_id, *args, **kwargs):
+    queryset = Tweet.objects.filter(id=tweet_id)
+    if not queryset.exists():
+        return Response({f"post with id: {tweet_id} was not found"}, status=status.HTTP_404_NOT_FOUND,)
+    obj = queryset.first()
+    serializer = TweetSerializer(obj)
+    return Response(serializer.data)
+
+
+# Views based on pure django
+# view that creates tweets based on forms
 def tweet_create_view_pure_django(request, *args, **kwargs):
     '''
     REST API Create View
@@ -53,7 +80,8 @@ def tweet_create_view_pure_django(request, *args, **kwargs):
             return JsonResponse(form.errors, status=400)
     return render(request, "tweets/components/tweet_create_form.html", context={"Form": form})
 
-def tweets_list_view(request, *args,**kwargs):
+# view that lists tweets based on the serialize method in models
+def tweets_list_view_pure_django(request, *args,**kwargs):
     querysets = Tweet.objects.all()
     tweets_list = [x.serialize() for x in querysets]
     data = {
@@ -62,8 +90,8 @@ def tweets_list_view(request, *args,**kwargs):
     }
     return JsonResponse(data)
 
-
-def tweet_detail_view(request,tweet_id ,*args,**kwargs):
+# tweet detail view
+def tweet_detail_view_pure_django(request,tweet_id ,*args,**kwargs):
     """
     REST API VIEW
     API endpoints that can be consumed by javascript or Swift/Java/iOs/Android 
@@ -83,54 +111,3 @@ def tweet_detail_view(request,tweet_id ,*args,**kwargs):
         status = 404
 
     return JsonResponse(data, status= status)
-
-
-
-# def home_view(request, *args,**kwargs):
-#     print(args,kwargs)
-#     return HttpResponse("<h1>Hello World</h1>")
-
-
-# def tweet_detail_view(request,tweet_id ,*args,**kwargs):
-#     print(args,kwargs)
-#     return HttpResponse(f"<h1>Hello {tweet_id}</h1>")
-
-
-# def tweet_detail_view(request,tweet_id ,*args,**kwargs):
-#     try:
-#         obj = Tweet.objects.get(id=tweet_id)
-#     except:
-#         raise Http404
-#     return HttpResponse(f"<h1>{tweet_id} - {obj.content}</h1>")
-
-
-# def tweet_detail_view(request,tweet_id ,*args,**kwargs):
-#     """
-#     REST API VIEW
-#     return json data
-#     """
-#     obj = Tweet.objects.get(id=tweet_id)
-
-#     data = {
-#         "id": tweet_id,
-#         "content": obj.content,
-#         # "image_path": obj.image.url,
-#     }
-#     return JsonResponse(data)
-
-
-# def tweet_detail_view(request,tweet_id ,*args,**kwargs):
-
-#     data = {
-#         "id": tweet_id,
-#     }
-#     status = 200
-
-#     try:
-#         obj = Tweet.objects.get(id=tweet_id)
-#         data["content"] = obj.content
-#     except:
-#         data["message"] = "Not found"
-#         status = 404
-
-#     return JsonResponse(data, status= status)
