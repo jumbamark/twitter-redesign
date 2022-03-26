@@ -5,6 +5,7 @@ from .views import (
     tweets_list_view, 
     tweet_create_view, 
     tweet_delete_view,
+    tweet_action_view,
 )
 
 app_name = 'tweets'
@@ -15,4 +16,5 @@ urlpatterns = [
     path("tweets/", tweets_list_view, name="tweetsList"),
     path("tweets/<int:tweet_id>", tweet_detail_view, name="tweet-detail"),
     path("api/tweets/<int:tweet_id>/delete", tweet_delete_view, name="tweet-delete"),
+    path("api/tweets/action", tweet_action_view, name="tweet-action"),
 ]
