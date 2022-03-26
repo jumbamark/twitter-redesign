@@ -134,6 +134,26 @@ loadTweets(tweetsContainerElement);
 // Like Button functionality
 const handleDidLike = (tweet_id, currentCount) => {
   console.log(tweet_id, currentCount);
+  const url = "api/tweets/action" // DOMString representing the url to send the request to
+  const method = "POST";
+  const data = JSON.stringify({
+    id:tweet_id,
+    action: "like"
+  });
+  // creating a new XMLHttpRequest object
+  const xhr = new XMLHttpRequest();
+  xhr.open(method, url);
+
+  // setting headers
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.setRequestHeader("HTTP_X_REQUESTED_WITH","XMLHttpRequest");
+  xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
+
+  xhr.onload = () => {
+    console.log(xhr.status, xhr.response)
+  };
+
+  xhr.send(data);
 };
 
 function LikeBtn(tweet) {
