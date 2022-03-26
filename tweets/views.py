@@ -43,11 +43,24 @@ def tweets_list_view(request, *args, **kwargs):
 def tweet_detail_view(request, tweet_id, *args, **kwargs):
     queryset = Tweet.objects.filter(id=tweet_id)
     if not queryset.exists():
-        return Response({"detail":f"Tweet with id {tweet_id} was not found"}, status=status.HTTP_404_NOT_FOUND,)
+        return Response({"detail":f"Tweet with id {tweet_id} was not found"}, status=status.HTTP_404_NOT_FOUND)
     obj = queryset.first()
     serializer = TweetSerializer(obj)
     return Response(serializer.data)
 
+# delete tweet API View
+@api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated]) 
+def tweet_delete_view(request, tweet_id, *args, **kwargs):
+    queryset = Tweet.objects.filter(id=tweet_id)
+    if not queryset.exists():
+        return Response({"detail":f"Tweet with id {tweet_id} was not found"}, status=status.HTTP_404_NOT_FOUND)
+    qs = queryset.filter(user=request.user)
+    if not qs.exists():
+        return Response({"detail":f"Not authorized to perform requested action"}, status=status.HTTP_403_FORBIDDEN)
+    obj = queryset.first()
+    obj.delete()
+    return Response({"detail":f"Tweet with id {tweet_id} has been deleted"}, status=status.HTTP_204_NO_CONTENT)
 
 
 # Views based on pure django
