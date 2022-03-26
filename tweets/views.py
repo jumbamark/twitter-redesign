@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .serializers import TweetSerializer
+from .serializers import TweetSerializer, TweetActionSerializer
 from .models import Tweet
 from .forms import TweetForm
 
@@ -61,6 +61,38 @@ def tweet_delete_view(request, tweet_id, *args, **kwargs):
     obj = queryset.first()
     obj.delete()
     return Response({"detail":f"Tweet with id {tweet_id} has been deleted"}, status=status.HTTP_204_NO_CONTENT)
+
+# Handling the view logic on likes
+@api_view(['POST'])
+@permission_classes([IsAuthenticated]) 
+def tweet_action_view(request, *args, **kwargs):
+    '''
+    id is required
+    Action options are: like, unlike, retweet
+    '''
+
+    serializer = TweetActionSerializer(request.POST) # there is POST data
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        tweet_id = data.get("id")
+        action = data.get("action")
+
+        queryset = Tweet.objects.filter(id=tweet_id)
+        if not queryset.exists():
+            return Response({"detail":f"Tweet with id {tweet_id} was not found"}, status=status.HTTP_404_NOT_FOUND)
+        obj = queryset.first()
+
+        if action == "like":
+            obj.likes.add(request.user)
+        elif action == "unlike":
+            obj.likes.remove(request.user)
+        elif action == "retweet":
+            # new_tweet = Tweet.objects.create(user=request.user, parent=obj, content=obj.content)
+            pass
+
+    return Response({"detail":f"Tweet with id {tweet_id} has been deleted"}, status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 # Views based on pure django
