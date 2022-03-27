@@ -70,8 +70,8 @@ def tweet_action_view(request, *args, **kwargs):
     id is required
     Action options are: like, unlike, retweet
     '''
-
-    serializer = TweetActionSerializer(data=request.POST) # there is POST data
+    print(request.POST, request.data)
+    serializer = TweetActionSerializer(data=request.data) # there is POST data
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
         tweet_id = data.get("id")
@@ -84,13 +84,15 @@ def tweet_action_view(request, *args, **kwargs):
 
         if action == "like":
             obj.likes.add(request.user)
+            serializer = TweetSerializer(obj)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         elif action == "unlike":
             obj.likes.remove(request.user)
         elif action == "retweet":
             # new_tweet = Tweet.objects.create(user=request.user, parent=obj, content=obj.content)
             pass
 
-    return Response({"detail":f"Tweet with id {tweet_id} has been deleted"}, status=status.HTTP_204_NO_CONTENT)
+    return Response({}, status=status.HTTP_200_OK)
 
 
 
