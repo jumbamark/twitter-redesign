@@ -109,7 +109,7 @@ const loadTweets = function(tweetsElement) {
   // function called when xhr transaction completes successfully.
   xhr.onload = () => {
     // Do something with the retrieved data ( found in xhr.response )
-    console.log(xhr.response);
+    // console.log(xhr.response);
     const tweets_list = xhr.response;
     let finalTweetStri = "";
 
@@ -131,14 +131,32 @@ const loadTweets = function(tweetsElement) {
 // calling the function to load tweets to the home.html page
 loadTweets(tweetsContainerElement);
 
+// Acquiring csrf_token
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
 // Like Button functionality
-const handleDidLike = (tweet_id, currentCount) => {
-  console.log(tweet_id, currentCount);
-  const url = "api/tweets/action" // DOMString representing the url to send the request to
+const handleTweetActionBtn = (tweet_id, currentCount, action) => {
+  // console.log(tweet_id, currentCount);
+  const csrftoken = getCookie("csrftoken"); // grabbing the csrf cookie
+  const url = "api/tweets/action"; // DOMString representing the url to send the request to
   const method = "POST";
   const data = JSON.stringify({
-    id:tweet_id,
-    action: "like"
+    id: tweet_id,
+    action: action,
   });
   // creating a new XMLHttpRequest object
   const xhr = new XMLHttpRequest();
@@ -146,11 +164,15 @@ const handleDidLike = (tweet_id, currentCount) => {
 
   // setting headers
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.setRequestHeader("HTTP_X_REQUESTED_WITH","XMLHttpRequest");
-  xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
+  xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest");
+  xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+  
+  // setting the csrf_token on the AJAX request
+  xhr.setRequestHeader("X-CSRFToken", csrftoken);
 
   xhr.onload = () => {
-    console.log(xhr.status, xhr.response)
+    // console.log(xhr.status, xhr.response);
+    loadTweets(tweetsContainerElement);  //refreshes all the tweets
   };
 
   xhr.send(data);
@@ -158,13 +180,25 @@ const handleDidLike = (tweet_id, currentCount) => {
 
 function LikeBtn(tweet) {
   return (
-    "<button class='btn btn-primary btn-sm' onclick=handleDidLike(" +
+    "<button class='btn btn-primary btn-sm' onclick=handleTweetActionBtn(" +
     tweet.id +
     "," +
     tweet.likes +
-    ")>" +
+    ",'like')>" +
     tweet.likes +
     " Likes </button>"
+  );
+}
+
+function UnLikeBtn(tweet) {
+  return (
+    "<button class='btn btn-outline-primary btn-sm' onclick=handleTweetActionBtn(" + tweet.id + "," + tweet.likes + ",'unlike')>Unlike</button>"
+  );
+}
+
+function RetweetBtn(tweet) {
+  return (
+    "<button class='btn btn-outline-success btn-sm' onclick=handleTweetActionBtn(" + tweet.id + "," + tweet.likes + ",'retweet')>ReTweet</button>"
   );
 }
 
@@ -177,6 +211,8 @@ function formatTweetElement(tweet) {
     tweet.content +
     "</p><div class='btn-group'>" +
     LikeBtn(tweet) +
+    UnLikeBtn(tweet) +
+    RetweetBtn(tweet) +
     "</div></div>";
   return formattedTweet;
 }
