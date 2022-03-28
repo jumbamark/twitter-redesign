@@ -33,15 +33,10 @@ class TweetActionSerializer(serializers.Serializer):
 # Read only serializer because of retweeting
 class TweetSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
-    content = serializers.SerializerMethodField(read_only=True)
+    parent = TweetCreateSerializer(read_only=True)
     class Meta:
         model = Tweet
-        fields = ['id', 'content', 'likes', 'is_retweet']
+        fields = ['id', 'content', 'likes', 'is_retweet', 'parent']
 
     def get_likes(self, obj):
         return obj.likes.count()
-
-    def get_content(self, obj):
-        if obj.is_retweet:
-            return obj.parent.content
-        return obj.content
