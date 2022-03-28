@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-import random
 
 # Referencing a built-in django feature for the User model
 User = settings.AUTH_USER_MODEL
@@ -26,9 +25,6 @@ class Tweet(models.Model):
     class Meta:
         ordering = ['-id']
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "content": self.content,
-            "likes": random.randint(0, 200)
-        }
+    @property
+    def is_retweet(self):
+        return self.parent != None # if parent is not null then it is a retweet
