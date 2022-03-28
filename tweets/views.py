@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .serializers import TweetSerializer, TweetActionSerializer
+from .serializers import TweetCreateSerializer, TweetSerializer, TweetActionSerializer
 from .models import Tweet
 from .forms import TweetForm
 
@@ -22,7 +22,7 @@ def home_view(request, *args,**kwargs):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated]) # if they are authenticated they'll have access to this view otherwise they won't
 def tweet_create_view(request, *args, **kwargs):
-    serializer = TweetSerializer(data=request.POST)
+    serializer = TweetCreateSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):
         obj = serializer.save(user=request.user)
         print(obj)
@@ -76,6 +76,7 @@ def tweet_action_view(request, *args, **kwargs):
         data = serializer.validated_data
         tweet_id = data.get("id")
         action = data.get("action")
+        content = data.get("content")
 
         queryset = Tweet.objects.filter(id=tweet_id)
         if not queryset.exists():
@@ -89,10 +90,12 @@ def tweet_action_view(request, *args, **kwargs):
         elif action == "unlike":
             obj.likes.remove(request.user)
         elif action == "retweet":
-            # new_tweet = Tweet.objects.create(user=request.user, parent=obj, content=obj.content)
-            pass
+            parent_obj = obj
+            new_tweet = Tweet.objects.create(user=request.user, parent=parent_obj, content=content)
+            serializer = TweetSerializer(new_tweet)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
-    return Response({}, status=status.HTTP_200_OK)
+    return Response({}, status=200)
 
 
 
