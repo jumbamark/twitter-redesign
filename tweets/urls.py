@@ -17,7 +17,7 @@ app_name = 'tweets'
 urlpatterns = [
     path("", tweets_list_view, name="tweetsList"),
     path("create/", tweet_create_view, name="tweet-create"),
-    path("action", tweet_action_view, name="tweet-action"),
+    path("action/", tweet_action_view, name="tweet-action"),
     path("<int:tweet_id>/", tweet_detail_view, name="tweet-detail"),
-    path("<int:tweet_id>/delete", tweet_delete_view, name="tweet-delete"),
+    path("<int:tweet_id>/delete/", tweet_delete_view, name="tweet-delete"),
 ]
