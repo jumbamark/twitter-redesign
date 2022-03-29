@@ -152,7 +152,7 @@ function getCookie(name) {
 const handleTweetActionBtn = (tweet_id, currentCount, action) => {
   // console.log(tweet_id, currentCount);
   const csrftoken = getCookie("csrftoken"); // grabbing the csrf cookie
-  const url = "api/tweets/action"; // DOMString representing the url to send the request to
+  const url = "api/tweets/action/"; // DOMString representing the url to send the request to
   const method = "POST";
   const data = JSON.stringify({
     id: tweet_id,
