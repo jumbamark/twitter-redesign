@@ -57,7 +57,7 @@ def tweet_delete_view(request, tweet_id, *args, **kwargs):
         return Response({"detail":f"Tweet with id {tweet_id} was not found"}, status=status.HTTP_404_NOT_FOUND)
     qs = queryset.filter(user=request.user)
     if not qs.exists():
-        return Response({"detail":f"Not authorized to perform requested action"}, status=status.HTTP_403_FORBIDDEN)
+        return Response({"detail":f"Not authorized to perform requested action"}, status=status.HTTP_401_UNAUTHORIZED)
     obj = queryset.first()
     obj.delete()
     return Response({"detail":f"Tweet with id {tweet_id} has been deleted"}, status=status.HTTP_204_NO_CONTENT)
@@ -89,11 +89,12 @@ def tweet_action_view(request, *args, **kwargs):
             return Response(serializer.data, status=status.HTTP_200_OK)
         elif action == "unlike":
             obj.likes.remove(request.user)
-        elif action == "retweet":
-            parent_obj = obj
-            new_tweet = Tweet.objects.create(user=request.user, parent=parent_obj, content=content)
-            serializer = TweetSerializer(new_tweet)
+            serializer = TweetSerializer(obj)
             return Response(serializer.data, status=status.HTTP_200_OK)
+        elif action == "retweet":
+            new_tweet = Tweet.objects.create(user=request.user, parent=obj, content=content)
+            serializer = TweetSerializer(new_tweet)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     return Response({}, status=200)
 
