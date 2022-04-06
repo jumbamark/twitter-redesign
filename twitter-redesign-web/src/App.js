@@ -5,6 +5,7 @@ import {useState, useEffect} from 'react';
 function App() {
   const [tweets, setTweets] = useState([])
   const performLookup = () => {
+    
     // do my lookup
     const tweetItems = [{"content": 123}, {"content": "Hello world"}]
     setTweets(tweetItems)
