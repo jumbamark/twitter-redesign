@@ -1,7 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
+import {useState, useEffect} from 'react';
 
 function App() {
+  const [tweets, setTweets] = useState([])
+  const performLookup = () => {
+    // do my lookup
+    const tweetItems = [{"content": 123}, {"content": "Hello world"}]
+    setTweets(tweetItems)
+  }
+  useEffect(performLookup, []) 
+
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +26,9 @@ function App() {
         >
           Learn React
         </a>
+        <p>{tweets.map((tweet, index) => {
+          return <li>{tweet.content}</li>
+        })}</p>
       </header>
     </div>
   );
