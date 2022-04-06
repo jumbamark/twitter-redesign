@@ -97,7 +97,7 @@ const loadTweets = function(tweetsElement) {
   // using  XMLHttpRequest to issue HTTP requests-to exchange data between the site and a server.
   const xhr = new XMLHttpRequest();
   const method = "GET";
-  const url = "/tweets";
+  const url = "http://localhost:8000/api/tweets/";
   const responseType = "json";
 
   // specitying what type of data the response contains
