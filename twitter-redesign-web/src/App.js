@@ -1,5 +1,5 @@
 import './App.css';
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 
 
 
@@ -32,6 +32,12 @@ const loadTweets = function (callback) {
   xhr.send();
 };
 
+function Tweet(props) {
+  const {tweet} = props;
+  return <div>
+    <p>{tweet.id} - {tweet.content}</p>
+  </div>
+}
 
 function App() {
   const [tweets, setTweets] = useState([])
@@ -49,15 +55,19 @@ function App() {
   }, [])
 
   return (
-    <div className="app">
-      <p>
-        {tweets.map((tweet, index) => {
-          return <li>
-            {tweet.content}
-          </li>
-        })}
-      </p>
-    </div>
+      <div className="app">
+        <div>
+          {tweets.map((item, index) => {
+            return (
+              <Tweet
+                tweet={item}
+                className="col-12 col-md-10 mx-auto border rounded py-3 mb-4"
+                key={`${index}-{item.id}`}
+              />
+            );
+          })}
+        </div>
+      </div>
   );
 }
 
