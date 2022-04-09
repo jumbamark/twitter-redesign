@@ -37,7 +37,7 @@ function Tweets() {
 
     useEffect(() => {
         const myCallback = (response, status) => {
-        console.log(response, status);
+        // console.log(response, status);
         if (status === 200) {
             setTweets(response);
         } else {
@@ -50,7 +50,7 @@ function Tweets() {
     return (
         <div className="container">
             {tweets.map((tweet, index) => {
-                return <Tweet id={tweet.id} content={tweet.content} key={`${index}-{tweet.id}`}/>
+                return <Tweet id={tweet.id} content={tweet.content} key={`${index}-{tweet.id}`} likes={tweet.likes}/>
             })}
         </div>
     )
