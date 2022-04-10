@@ -1,10 +1,18 @@
 import React from 'react'
 
 function ActionBtn(props) {
-    const {action, likes} = props
+    const {action, likes,} = props
     const className = props.className ? props.className : 'btn btn-primary'
+    const actionDisplay = action.display ? action.display : 'Action'
+    const display = action.type === 'like' ? `${likes} ${actionDisplay}` : actionDisplay
+    const handleClick = (event) => {
+      event.preventDefault();
+      if (action.type === 'like') {
+        console.log(likes + 1)
+      }
+    }
     return (
-        action.type === "like" ? <button className={className}> {likes} Likes </button> : null
+      <button className={className} onClick={handleClick}> {display} </button>
     );
 }
 
@@ -18,7 +26,9 @@ function Tweet(props) {
           {id} - {content}
         </p>
         <div className="btn btn-group">
-          <ActionBtn likes={likes} action={{type: "like"}} />
+          <ActionBtn likes={likes} action={{type: "like", display: "Like(s)"}} />
+          <ActionBtn action={{type: "unlike", display: "Unlike"}} />
+          <ActionBtn action={{type: "retweet", display: "Retweet"}} />
         </div>
       </div>
     );
