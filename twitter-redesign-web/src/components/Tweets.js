@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Tweet from "./Tweet";
+import TweetCreate from "./TweetCreate";
 
 
 const loadTweets = function (callback) {
@@ -49,6 +50,7 @@ function Tweets() {
 
     return (
         <div className="container">
+            <TweetCreate/>
             {tweets.map((tweet, index) => {
                 return <Tweet id={tweet.id} content={tweet.content} key={`${index}-{tweet.id}`} likes={tweet.likes}/>
             })}
