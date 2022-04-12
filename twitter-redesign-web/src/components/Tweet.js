@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 function ActionBtn(props) {
     const {action, likes} = props
     const [Likes, setLikes] = useState(likes ?  likes : 0)
-    const [userLike, setUserLike] = useState(false);
+    const [userLike, setUserLike] = useState(props.setUserLike ? props.setUserLike: false);
     const className = props.className ? props.className : 'btn btn-primary'
     const actionDisplay = action.display ? action.display : 'Action'
 

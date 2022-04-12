@@ -1,61 +1,46 @@
-import React, {useState, useEffect} from "react";
-import Tweet from "./Tweet";
-import TweetCreate from "./TweetCreate";
+import React, { useState } from 'react'
+import TweetsList from './TweetsList';
 
+function Tweets(props) {
+  const textAreaRef = React.createRef()
+  const [newTweets, setNewTweets] = useState([])
 
-const loadTweets = function (callback) {
-  // using  XMLHttpRequest to issue HTTP requests-to exchange data between the site and a server.
-  const xhr = new XMLHttpRequest();
-  const method = "GET";
-  const url = "http://127.0.0.1:8000/api/tweets/";
-  const responseType = "json";
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(event);
+    const newTweet = textAreaRef.current.value;
+    console.log(newTweet)
+    let tempNewTweets = [...newTweets];
+    // change this to a server side call
+    tempNewTweets.unshift({
+      content: newTweet,
+      likes: 1,
+      id: 100
+    })
+    setNewTweets(tempNewTweets)
+    textAreaRef.current.value = "";
+  }
 
-  // specitying what type of data the response contains
-  xhr.responseType = responseType;
-
-  // initializing requests
-  xhr.open(method, url);
-
-  // function called when xhr transaction completes successfully.
-  xhr.onload = () => {
-    // Do something with the retrieved data ( found in xhr.response )
-    // console.log(xhr.response);
-    callback(xhr.response, xhr.status);
-  };
-
-  xhr.onerror = (e) => {
-    console.log(e);
-    callback({message: "The request was an error"}, 400);
-  };
-
-  //  sending the request to the server
-  xhr.send();
-};
-
-
-function Tweets() {    
-    const [tweets, setTweets] = useState([]);
-
-    useEffect(() => {
-        const myCallback = (response, status) => {
-        // console.log(response, status);
-        if (status === 200) {
-            setTweets(response);
-        } else {
-            alert("There was an error");
-        }
-        };
-        loadTweets(myCallback);
-    }, []);
-
-    return (
-        <div className="container">
-            <TweetCreate/>
-            {tweets.map((tweet, index) => {
-                return <Tweet id={tweet.id} content={tweet.content} key={`${index}-{tweet.id}`} likes={tweet.likes}/>
-            })}
+  return (
+    <div className="container">
+      <div className="row my-3">
+        <div className="col-md-4 mx-auto col-12">
+          <form onSubmit={handleSubmit}>
+            <textarea
+              ref={textAreaRef}
+              required={true}
+              className="form-control"
+              name="tweet"
+            ></textarea>
+            <button type="submit" className="btn btn-primary my-3">
+              Tweet
+            </button>
+          </form>
         </div>
-    )
+      </div>
+      <TweetsList newTweets={newTweets}/>
+    </div>
+  );
 }
 
 export default Tweets

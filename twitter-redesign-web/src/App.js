@@ -1,5 +1,6 @@
 import './App.css';
 import Tweets from './components/Tweets';
+// import Tweets from './components/Tweets';
 
 function App() {
 
