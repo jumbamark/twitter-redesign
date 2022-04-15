@@ -37,7 +37,7 @@ urlpatterns = [
     path("create-tweet", tweet_create_view, name="tweet-create"),
     path("tweets/<int:tweet_id>", tweet_detail_view, name="tweet-detail"),
 
-    path("react/", TemplateView.as_view(template_name="tweets/react.html")),
+    path("react/", TemplateView.as_view(template_name="tweets/react_via_django.html")),
 ]
 
 if settings.DEBUG:

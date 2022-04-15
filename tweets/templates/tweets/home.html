@@ -7,15 +7,17 @@ Twitter Redesign | Home
 {% endblock title%}
 
 {% block content %}
+<div id="root"></div>
 
-<div class="row text-center">
+
+<div class="row text-center d-none">
     <div class="col">
         <h1>Welcome to Twitter Redesign</h1>
     </div>
 </div>
 
 <!-- tweet_create_view -->
-<div class="row mb-3">
+<div class="row mb-3 d-none">
     <div class="col-md-4 mx-auto col-10">
         <form action="/create-tweet" method="POST" class="form" id="tweet-create-form">
             {% csrf_token %}
@@ -27,9 +29,7 @@ Twitter Redesign | Home
     </div>
 </div>
 
-<div class="row" id="tweets">
-
-</div>
+<div class="row d-none" id="tweets"></div>
 
 <script src="{% static 'tweets/js/home.js' %}"></script>
 {% endblock content %}
