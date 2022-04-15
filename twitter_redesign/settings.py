@@ -136,8 +136,23 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-
+# URL to use when referring to static files located in STATIC_ROOT.
 STATIC_URL = 'static/'
+
+# static files that aren't tied to a particular app
+# where django also looks for static files
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+# absolute path directory where collectstatic will collect static files for deployment
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# URL that handles media served from MEDIA_ROOT
+MEDIA_URL = '/media/'
+
+# filesystem path to the directory that will hold user-upladed files
+MEDIA_ROOT = BASE_DIR / "static/images"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

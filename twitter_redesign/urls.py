@@ -15,17 +15,17 @@ Including another URLconf
 """
 
 # from tweets.views import home_view, tweet_detail_view
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
 from tweets.views import (
     home_view,
     tweet_detail_view, 
     tweets_list_view, 
-    tweet_create_view, 
-    tweet_delete_view,
-    tweet_action_view,
+    tweet_create_view,
 )
-
 
 
 urlpatterns = [
@@ -36,4 +36,10 @@ urlpatterns = [
     path("tweets/", tweets_list_view, name="tweetsList"),
     path("create-tweet", tweet_create_view, name="tweet-create"),
     path("tweets/<int:tweet_id>", tweet_detail_view, name="tweet-detail"),
+
+    path("react/", TemplateView.as_view(template_name="tweets/react.html")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
