@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import TweetsList from './TweetsList';
+import {createTweet, TweetsList} from './TweetsList';
 
 function Tweets(props) {
   const textAreaRef = React.createRef()
@@ -9,14 +9,17 @@ function Tweets(props) {
     event.preventDefault();
     console.log(event);
     const newTweet = textAreaRef.current.value;
-    console.log(newTweet)
     let tempNewTweets = [...newTweets];
     // change this to a server side call
-    tempNewTweets.unshift({
-      content: newTweet,
-      likes: 1,
-      id: 100
+    createTweet(newTweet, (response, status) => {
+      if (status === 201) {
+        tempNewTweets.unshift(response);
+      } else {
+        console.log(response);
+        alert("An error occured please try again")
+      }
     })
+
     setNewTweets(tempNewTweets)
     textAreaRef.current.value = "";
   }
