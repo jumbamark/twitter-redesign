@@ -161,21 +161,29 @@ MEDIA_ROOT = BASE_DIR / "static/images"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # cors-headers configuration
+# CORS_ALLOW_HEADERS = ['*'] 
 CORS_ALLOW_ALL_ORIGINS = True # any website has access to my api
 CORS_URLS_REGEX = r"^/api/.*$" # any url that matches this regular expression allow them to access this resource
 
+
 DEFAULT_RENDERER_CLASSES = [
-        'rest_framework.renderers.JSONRenderer',
-    ]
+    'rest_framework.renderers.JSONRenderer',
+]
+
+DEFAULT_AUTHENTICATION_CLASSES =[
+    'rest_framework.authentication.SessionAuthentication',
+]
 
 if DEBUG:
     DEFAULT_RENDERER_CLASSES += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
+    DEFAULT_AUTHENTICATION_CLASSES += [
+        'twitter_redesign.rest_api.dev.devAuthentication',
+    ]
+
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES,
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
 }
