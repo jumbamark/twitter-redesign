@@ -7,11 +7,14 @@ function Tweets(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event);
+    // console.log(event);
     const newTweet = textAreaRef.current.value;
     let tempNewTweets = [...newTweets];
-    // change this to a server side call
+
+    //change this to a server side call
     createTweet(newTweet, (response, status) => {
+      console.log(response, status);
+      console.log(newTweet);
       if (status === 201) {
         tempNewTweets.unshift(response);
       } else {
@@ -19,6 +22,12 @@ function Tweets(props) {
         alert("An error occured please try again")
       }
     })
+
+    // tempNewTweets.unshift({
+    //   content: newTweet,
+    //   likes: 1,
+    //   id: 100,
+    // });
 
     setNewTweets(tempNewTweets)
     textAreaRef.current.value = "";

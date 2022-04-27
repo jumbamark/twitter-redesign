@@ -30,11 +30,12 @@ const lookup = (method, endpoint, callback, data) => {
   const xhr = new XMLHttpRequest();
   // const method = "GET";
   const url = `http://127.0.0.1:8000/api/${endpoint}`;
-  // specitying what type of data the response contains
-  xhr.responseType = "json";
+
   const csrftoken = getCookie("csrftoken"); // grabbing the csrf cookie
   // initializing requests
   xhr.open(method, url);
+  // specitying what type of data the response contains
+  xhr.responseType = "json";
   xhr.setRequestHeader("Content-Type", "application/json");
 
   if (csrftoken) {
@@ -46,7 +47,8 @@ const lookup = (method, endpoint, callback, data) => {
   // function called when xhr transaction completes successfully.
   xhr.onload = () => {
     // Do something with the retrieved data ( found in xhr.response )
-    // console.log(xhr.response);
+    console.log(xhr.response);
+    console.log(xhr.status);
     callback(xhr.response, xhr.status);
   };
 
@@ -62,6 +64,7 @@ const lookup = (method, endpoint, callback, data) => {
 
 const createTweet = (newTweet, callback) => {
     lookup("POST", "tweets/create/", callback, {content: newTweet})
+    console.log()
 }
 
 
@@ -71,7 +74,7 @@ const loadTweets = function (callback) {
 
 
 function TweetsList(props) {
-    console.log(props.newTweets);  
+    console.log(props.newTweets);
     const [tweetsInit, setTweetsInit] = useState([]);
     const [tweets, setTweets] = useState([]);
     const [tweetsDidSet, setTweetsDidSet] = useState(false);
