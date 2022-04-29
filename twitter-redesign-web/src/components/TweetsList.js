@@ -47,8 +47,7 @@ const lookup = (method, endpoint, callback, data) => {
   // function called when xhr transaction completes successfully.
   xhr.onload = () => {
     // Do something with the retrieved data ( found in xhr.response )
-    console.log(xhr.response);
-    console.log(xhr.status);
+    // console.log(xhr.response, xhr.status);
     callback(xhr.response, xhr.status);
   };
 
@@ -74,7 +73,7 @@ const loadTweets = function (callback) {
 
 
 function TweetsList(props) {
-    console.log(props.newTweets);
+    // console.log(props.newTweets);
     const [tweetsInit, setTweetsInit] = useState([]);
     const [tweets, setTweets] = useState([]);
     const [tweetsDidSet, setTweetsDidSet] = useState(false);

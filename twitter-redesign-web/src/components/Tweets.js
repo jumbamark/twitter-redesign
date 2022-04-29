@@ -11,25 +11,19 @@ function Tweets(props) {
     const newTweet = textAreaRef.current.value;
     let tempNewTweets = [...newTweets];
 
-    //change this to a server side call
-    createTweet(newTweet, (response, status) => {
-      console.log(response, status);
-      console.log(newTweet);
+
+    const handleBackendUpdate = (response, status) => {
+      // backend API response handler
       if (status === 201) {
-        tempNewTweets.unshift(response);
+        tempNewTweets.push(response);
+        setNewTweets(tempNewTweets);
       } else {
-        console.log(response);
-        alert("An error occured please try again")
+        alert("There was an error");
       }
-    })
+    }
 
-    // tempNewTweets.unshift({
-    //   content: newTweet,
-    //   likes: 1,
-    //   id: 100,
-    // });
-
-    setNewTweets(tempNewTweets)
+    // backend API request
+    createTweet(newTweet, handleBackendUpdate);
     textAreaRef.current.value = "";
   }
 
