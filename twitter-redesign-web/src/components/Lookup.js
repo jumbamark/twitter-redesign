@@ -60,9 +60,14 @@ const apiTweetCreate = (newTweet, callback) => {
   console.log();
 };
 
+const apiTweetAction = (tweetId, action, callback) => {
+    const data = {id: tweetId, action: action};
+    lookup("POST", "tweets/action/",callback, data);
+}
+
 const apiTweetList = function (callback) {
   lookup("GET", "tweets/", callback);
 };
 
 
-export {apiTweetCreate, apiTweetList};
+export {apiTweetCreate, apiTweetAction, apiTweetList};

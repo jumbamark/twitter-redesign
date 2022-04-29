@@ -1,24 +1,24 @@
 import React, { useState } from 'react'
+import {apiTweetAction} from "./Lookup";
 
 function ActionBtn(props) {
-    const {action, likes} = props
+    const {id, action, likes} = props
     const [Likes, setLikes] = useState(likes ?  likes : 0)
-    const [userLike, setUserLike] = useState(props.setUserLike ? props.setUserLike: false);
+    // const [userLike, setUserLike] = useState(props.setUserLike ? props.setUserLike: false);
     const className = props.className ? props.className : 'btn btn-primary'
     const actionDisplay = action.display ? action.display : 'Action'
 
+    const handleActionBackendEvent = (response, status) => {
+      console.log(response, status);
+      if (status === 200) {
+        setLikes(response.likes)
+        // setUserLike(true)
+      }
+    }
+
     const handleClick = (event) => {
       event.preventDefault();
-      if (action.type === "like") {
-        if (userLike === true) {
-          // perhaps I unlike it
-          setLikes(Likes - 1);
-          setUserLike(false)
-        } else {
-          setLikes(Likes + 1);
-          setUserLike(true)
-        }
-      }
+      apiTweetAction(id, action.type, handleActionBackendEvent)
     };
 
     const display = action.type === 'like' ? `${Likes} ${actionDisplay}` : actionDisplay
@@ -38,9 +38,9 @@ function Tweet(props) {
           {id} - {content}
         </p>
         <div className="btn btn-group">
-          <ActionBtn likes={likes} action={{type: "like", display: "Likes"}} />
-          <ActionBtn action={{type: "unlike", display: "Unlike"}} />
-          <ActionBtn action={{type: "retweet", display: "Retweet"}} />
+          <ActionBtn id={id} likes={likes} action={{type: "like", display: "Likes"}} />
+          <ActionBtn id={id} action={{type: "unlike", display: "Unlike"}} />
+          <ActionBtn id={id} action={{type: "retweet", display: "Retweet"}} />
         </div>
       </div>
     );
