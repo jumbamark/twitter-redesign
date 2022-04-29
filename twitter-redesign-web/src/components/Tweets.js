@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import {createTweet, TweetsList} from './TweetsList';
+// import {apiTweetCreate, TweetsList} from './TweetsList';
+import {apiTweetCreate} from "./Lookup";
+import TweetsList from "./TweetsList";
 
 function Tweets(props) {
   const textAreaRef = React.createRef()
@@ -23,7 +25,7 @@ function Tweets(props) {
     }
 
     // backend API request
-    createTweet(newTweet, handleBackendUpdate);
+    apiTweetCreate(newTweet, handleBackendUpdate);
     textAreaRef.current.value = "";
   }
 

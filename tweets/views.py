@@ -22,7 +22,6 @@ def home_view(request, *args,**kwargs):
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated]) # if they are authenticated they'll have access to this view otherwise they won't
 def tweet_create_view(request, *args, **kwargs):
-    print(request.data)
     serializer = TweetCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
