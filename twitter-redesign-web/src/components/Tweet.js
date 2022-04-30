@@ -29,14 +29,15 @@ function ActionBtn(props) {
 }
 
 function Tweet(props) {
-    const {id, content, likes} = props
+    const {id, content, likes, parent} = props
     const className = props.className ? props.className : 'col-12 col-md-10 mx-auto border rounded py-3 mb-4'
     // const action = {type: "like"}
     return (
       <div className={className}>
-        <p>
-          {id} - {content}
-        </p>
+        <div>
+          <p>{id} - {content}</p>
+          { parent && <div> <Tweet tweet={parent}/> </div> }
+        </div>
         <div className="btn btn-group">
           <ActionBtn id={id} likes={likes} action={{type: "like", display: "Likes"}} />
           <ActionBtn id={id} action={{type: "unlike", display: "Unlike"}} />
