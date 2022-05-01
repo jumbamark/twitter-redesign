@@ -35,7 +35,7 @@ function TweetsList(props) {
     return (
         <div>
             {tweets.map((tweet, index) => {
-                return <Tweet id={tweet.id} content={tweet.content} key={`${index}-{tweet.id}`} likes={tweet.likes} parent={tweet.parent}/>
+                return <Tweet tweet={tweet} key={`${index}-{tweet.id}`}/>
             })}
         </div>
     )

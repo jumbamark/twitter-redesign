@@ -4,6 +4,6 @@ from django.contrib.auth.models import User
 
 class devAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
-        qs = User.objects.all()
+        qs = User.objects.filter(id=1)
         user = qs.order_by("?").first()
         return (user, None)
