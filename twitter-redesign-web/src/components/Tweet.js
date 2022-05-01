@@ -28,6 +28,17 @@ function ActionBtn(props) {
     );
 }
 
+function ParentTweet({parent}) {
+  return (
+    parent ?
+    <div className="row">
+      <div className="col-11 mx-auto p-3 border rounded">
+        <p className="mb-0 text-muted small">Retweet</p>
+        <Tweet className={" "} id={parent.id} content={parent.content} likes={parent.likes}/>
+      </div>
+    </div> : null
+  )
+}
 function Tweet(props) {
     const {tweet, id, content, likes, parent} = props
     const className = props.className ? props.className : 'col-12 col-md-10 mx-auto border rounded py-3 mb-4'
@@ -36,15 +47,9 @@ function Tweet(props) {
       <div className={className}>
         <div>
           <p>{id} - {content}</p>
-          
-          {parent && <div className="row">
-              <div className="col-11 mx-auto p-3 border rounded">
-                <p className="mb-0 text-muted small">Retweet</p>
-                <Tweet className={" "} id={parent.id} content={parent.content} />
-              </div>
-              </div>
-          }
+          <ParentTweet parent={parent}/>
         </div>
+
         <div className="btn btn-group">
           <ActionBtn
             tweet={tweet}
