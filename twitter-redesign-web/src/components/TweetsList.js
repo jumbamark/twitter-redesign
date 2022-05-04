@@ -15,11 +15,11 @@ function TweetsList(props) {
         if (final.length !== tweets.length) {
             setTweets(final)
         }
-    }, [props.newTweets, tweetsInit, tweets])
+    }, [props.newTweets, tweets, tweetsInit])
 
     useEffect(() => {
         if (tweetsDidSet === false) {
-            const myCallback = (response, status) => {
+            const handleTweetListLookup = (response, status) => {
                 // console.log(response, status);
                 if (status === 200) {
                     setTweetsInit(response);
@@ -28,14 +28,23 @@ function TweetsList(props) {
                     alert("There was an error");
                 }
             };
-            apiTweetList(myCallback);
+            apiTweetList(handleTweetListLookup);
         }
     }, [tweetsInit, tweetsDidSet, setTweetsDidSet]);
+
+    const handleDidRetweet = (newTweet) => {
+        const updateTweetsInit = [...tweetsInit];
+        updateTweetsInit.unshift(newTweet);
+        setTweetsInit(updateTweetsInit)
+        const updateFinalTweets = [...tweets];
+        updateFinalTweets.unshift(tweets);
+        setTweets(updateFinalTweets);
+    }
 
     return (
         <div>
             {tweets.map((tweet, index) => {
-                return <Tweet tweet={tweet} key={`${index}-{tweet.id}`}/>
+                return <Tweet tweet={tweet} didRetweet={handleDidRetweet} key={`${index}-{tweet.id}`}/>
             })}
         </div>
     )

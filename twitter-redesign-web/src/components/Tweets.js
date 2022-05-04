@@ -7,23 +7,21 @@ function Tweets(props) {
   const textAreaRef = React.createRef()
   const [newTweets, setNewTweets] = useState([])
 
+  const handleBackendUpdate = (response, status) => {
+    // backend API response handler
+    let tempNewTweets = [...newTweets];
+    if (status === 201) {
+      tempNewTweets.unshift(response);
+      setNewTweets(tempNewTweets);
+    } else {
+      alert("There was an error");
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // console.log(event);
     const newTweet = textAreaRef.current.value;
-    let tempNewTweets = [...newTweets];
-
-
-    const handleBackendUpdate = (response, status) => {
-      // backend API response handler
-      if (status === 201) {
-        tempNewTweets.push(response);
-        setNewTweets(tempNewTweets);
-      } else {
-        alert("There was an error");
-      }
-    }
-
     // backend API request
     apiTweetCreate(newTweet, handleBackendUpdate);
     textAreaRef.current.value = "";
