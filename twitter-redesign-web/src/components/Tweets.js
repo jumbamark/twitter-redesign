@@ -4,6 +4,7 @@ import {apiTweetCreate} from "./Lookup";
 import TweetsList from "./TweetsList";
 
 function Tweets(props) {
+  console.log(props)
   const textAreaRef = React.createRef()
   const [newTweets, setNewTweets] = useState([])
 
@@ -28,7 +29,7 @@ function Tweets(props) {
   }
 
   return (
-    <div className="container">
+    <div className="container text-center">
       <div className="row my-3">
         <div className="col-md-4 mx-auto col-12">
           <form onSubmit={handleSubmit}>
