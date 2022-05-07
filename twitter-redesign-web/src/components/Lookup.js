@@ -65,9 +65,17 @@ const apiTweetAction = (tweetId, action, callback) => {
     lookup("POST", "tweets/action/",callback, data);
 }
 
-const apiTweetList = function (callback) {
-  lookup("GET", "tweets/", callback);
+const apiTweetList = function (username, callback) {
+  let endpoint = "tweets/";
+  if (username) {
+    endpoint = `tweets/?username=${username}`;
+  }
+  lookup("GET", endpoint, callback);
 };
 
+const apiTweetDetail = (tweetId, callback) => {
+  lookup("GET", `tweets/${tweetId}/`, callback);
+}
 
-export {apiTweetCreate, apiTweetAction, apiTweetList};
+
+export {apiTweetCreate, apiTweetAction, apiTweetList, apiTweetDetail};

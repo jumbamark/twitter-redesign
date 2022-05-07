@@ -28,9 +28,9 @@ function TweetsList(props) {
                     alert("There was an error");
                 }
             };
-            apiTweetList(handleTweetListLookup);
+            apiTweetList(props.username, handleTweetListLookup);
         }
-    }, [tweetsInit, tweetsDidSet, setTweetsDidSet]);
+    }, [tweetsInit, tweetsDidSet, setTweetsDidSet, props.username]);
 
     const handleDidRetweet = (newTweet) => {
         const updateTweetsInit = [...tweetsInit];

@@ -7,6 +7,7 @@ function Tweets(props) {
   console.log(props)
   const textAreaRef = React.createRef()
   const [newTweets, setNewTweets] = useState([])
+  const canTweet = props.canTweet === "false" ? false : true
 
   const handleBackendUpdate = (response, status) => {
     // backend API response handler
@@ -31,7 +32,7 @@ function Tweets(props) {
   return (
     <div className="container text-center">
       <div className="row my-3">
-        <div className="col-md-4 mx-auto col-12">
+        {canTweet === true && <div className="col-md-4 mx-auto col-12">
           <form onSubmit={handleSubmit}>
             <textarea
               ref={textAreaRef}
@@ -44,8 +45,9 @@ function Tweets(props) {
             </button>
           </form>
         </div>
+        }
       </div>
-      <TweetsList newTweets={newTweets}/>
+      <TweetsList newTweets={newTweets} {...props}/>
     </div>
   );
 }
