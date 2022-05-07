@@ -5,21 +5,21 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Tweets from './components/Tweets';
 
-
-const tweetsEl = document.getElementById("tweets");
-if (tweetsEl) {
-  console.log(tweetsEl.dataset);
-  createRoot(tweetsEl).render(<Tweets username={tweetsEl.dataset.username} />);
-}
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-  console.log(document.getElementById("root").dataset);
-  root.render(
+const root = document.getElementById("root");
+if (root) {
+  ReactDOM.createRoot(root).render(
     <React.StrictMode>
       <App />
     </React.StrictMode>
   );
+}
 
+
+const e = React.createElement
+const tweetsEl = document.getElementById("tweets");
+if (tweetsEl) {
+  createRoot(tweetsEl).render(e(Tweets, tweetsEl.dataset));
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
