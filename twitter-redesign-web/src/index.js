@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Tweets from './components/Tweets';
+import {TweetDetail} from './components/TweetsList';
 
 const root = document.getElementById("root");
 if (root) {
@@ -20,6 +21,12 @@ const tweetsEl = document.getElementById("tweets");
 if (tweetsEl) {
   createRoot(tweetsEl).render(e(Tweets, tweetsEl.dataset));
 }
+
+
+const tweetDetailElements = document.querySelectorAll(".tweet-detail");
+tweetDetailElements.forEach(container => {
+  createRoot(container).render(e(TweetDetail, container.dataset));
+})
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

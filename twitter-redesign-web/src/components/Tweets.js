@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import TweetCreate from './TweetCreate';
-import TweetsList from "./TweetsList";
+import {TweetsList} from "./TweetsList";
 
 
 function Tweets(props) {

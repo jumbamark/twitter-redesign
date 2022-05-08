@@ -1,6 +1,33 @@
 import React, {useState, useEffect} from "react";
 import Tweet from "./Tweet";
 import {apiTweetList} from "./Lookup";
+import {apiTweetDetail} from "./Lookup";
+
+function TweetDetail(props) {
+    const {tweetId} = props;
+    const [didLookup, setDidLookup] = useState(false);
+    const [tweet, setTweet] = useState({});
+
+    const handleBackendLookup = (response, status) => {
+        if (status === 200) {
+            setTweet(response)
+        } else {
+            alert("There was an error finding your tweet")
+        }
+    }
+
+    useEffect(() => {
+        if (didLookup === false) {
+            apiTweetDetail(tweetId, handleBackendLookup);
+            setDidLookup(true);
+        }
+    }, [didLookup, setDidLookup, tweetId])
+
+    return (
+        tweet === null ? null :
+        <Tweet tweet={tweet} className={props.className}/>
+    )
+}
 
 
 function TweetsList(props) {
@@ -50,4 +77,4 @@ function TweetsList(props) {
     )
 }
 
-export  default TweetsList;
+export  {TweetDetail, TweetsList};
