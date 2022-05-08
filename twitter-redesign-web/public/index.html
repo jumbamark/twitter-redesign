@@ -50,12 +50,13 @@
     <script>
       var path = window.location.pathname
       var idRegex = /(?<tweetid>\d+)/
-        var match = path.match(idRegex)
-      if (path !== "/") {
+      var match = path.match(idRegex)
+
+      if (match) {
+        var tweetId = match.groups.tweetid
         var tweetsEl = document.getElementById("tweets")
         tweetsEl.className = "d-none"
 
-        var tweetId = 69;
         var tweetEl = " <div class='tweet-detail' data-tweet-id=" + tweetId + " data-class-name='col-6 mx-auto pt-2'></div> "
         var mainContainer = document.getElementById("tweet-container")
         mainContainer.innerHTML = tweetEl;
