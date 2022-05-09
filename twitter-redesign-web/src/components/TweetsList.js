@@ -6,7 +6,7 @@ import {apiTweetDetail} from "./Lookup";
 function TweetDetail(props) {
     const {tweetId} = props;
     const [didLookup, setDidLookup] = useState(false);
-    const [tweet, setTweet] = useState({});
+    const [tweet, setTweet] = useState(null);
 
     const handleBackendLookup = (response, status) => {
         if (status === 200) {

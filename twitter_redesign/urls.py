@@ -21,23 +21,24 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 from tweets.views import (
-    home_view,
-    tweet_detail_view, 
-    tweets_list_view, 
-    tweet_create_view,
+    local_tweets_list_view, 
+    local_tweets_detail_view, 
+    local_tweets_profile_view,
+
+    
 )
 
 
 urlpatterns = [
-    path("", home_view, name="homePage"),
+    path("", local_tweets_list_view, name="homePage"),
     path("api/tweets/", include("tweets.urls")),
     path('admin/', admin.site.urls),
 
-    path("tweets/", tweets_list_view, name="tweetsList"),
-    path("create-tweet", tweet_create_view, name="tweet-create"),
-    path("tweets/<int:tweet_id>", tweet_detail_view, name="tweet-detail"),
+    path("<int:tweet_id>", local_tweets_detail_view, name="tweet-detail"),
+    path("profile/<str:username>", local_tweets_profile_view, name="tweet-profile"),
 
     path("react/", TemplateView.as_view(template_name="tweets/react_via_django.html")),
+    # path("react/", TemplateView.as_view(template_name="tweets/react.html")),
 ]
 
 if settings.DEBUG:

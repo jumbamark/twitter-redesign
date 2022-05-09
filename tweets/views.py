@@ -13,8 +13,22 @@ from .forms import TweetForm
 
 
 # Create your views here.
-def home_view(request, *args,**kwargs):
-    return render(request, "tweets/home.html")
+def home_view(request, *args, **kwargs):
+    username = None
+    if request.user.is_authenticated:
+        username = request.user.username
+    return render(request, "tweets/home.html", context={"username": username},status=status.HTTP_200_OK)
+
+def local_tweets_list_view(request, *args, **kwargs):
+    return render(request, "tweets/list.html")
+
+def local_tweets_detail_view(request, tweet_id, *args, **kwargs):
+    return render(request, "tweets/detail.html", context={"tweet_id": tweet_id})
+
+def local_tweets_profile_view(request, username, *args, **kwargs):
+    return render(request, "tweets/profile.html", context={"profile_username": username})
+
+
 
 
 # tweet create view based on serializers
@@ -37,7 +51,7 @@ def tweets_list_view(request, *args, **kwargs):
     if username != None:
         queryset = queryset.filter(user__username__iexact=username)
     serializer = TweetSerializer(queryset, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # tweet_detail_view based on serializers
@@ -48,7 +62,7 @@ def tweet_detail_view(request, tweet_id, *args, **kwargs):
         return Response({"detail":f"Tweet with id {tweet_id} was not found"}, status=status.HTTP_404_NOT_FOUND)
     obj = queryset.first()
     serializer = TweetSerializer(obj)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 # delete tweet API View
 @api_view(['DELETE', 'POST'])

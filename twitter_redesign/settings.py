@@ -142,8 +142,8 @@ STATIC_URL = 'static/'
 # static files that aren't tied to a particular app
 # where django also looks for static files
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    # 'twitter-redesign-web/build/static',
+    # BASE_DIR / "static",
+    'twitter-redesign-web/build/static',
 ]
 
 # absolute path directory where collectstatic will collect static files for deployment
