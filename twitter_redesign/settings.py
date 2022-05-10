@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     
     # internal
+    'accounts',
     'tweets',
 
 ]
@@ -179,7 +180,7 @@ if DEBUG:
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
     DEFAULT_AUTHENTICATION_CLASSES += [
-        'twitter_redesign.rest_api.dev.devAuthentication',
+        # 'twitter_redesign.rest_api.dev.devAuthentication',
     ]
 
 

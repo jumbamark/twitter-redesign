@@ -1,0 +1,21 @@
+{% extends 'tweets/base.html' %}
+
+{% load static %}
+
+{% block title %}
+Twitter Redesign | Home
+{% endblock title%}
+
+{% block content %}
+
+<div class="col-10 col-md-4 mx-auto">
+    <h1>{{ title }}</h1>
+
+    {% if description %}
+    <p>{{ description }}</p>
+    {% endif %}
+
+    {% include "tweets/components/form.html" with form=Form btn_label=btn_label %}
+</div>
+
+{% endblock content %}

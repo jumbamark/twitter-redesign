@@ -24,8 +24,11 @@ from tweets.views import (
     tweets_list_view, 
     tweets_detail_view, 
     tweets_profile_view,
-
-    
+)
+from accounts.views import (
+    login_view,
+    logout_view,
+    register_view
 )
 
 
@@ -39,6 +42,10 @@ urlpatterns = [
 
     path("react/", TemplateView.as_view(template_name="tweets/react_via_django.html")),
     # path("react/", TemplateView.as_view(template_name="tweets/react.html")),
+
+    path("login/", login_view, name="login"),
+    path("logout/", logout_view, name="logout"),
+    path("register/", register_view, name="register")
 ]
 
 if settings.DEBUG:
