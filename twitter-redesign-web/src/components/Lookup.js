@@ -43,11 +43,17 @@ const lookup = (method, endpoint, callback, data) => {
   xhr.onload = () => {
     // Do something with the retrieved data ( found in xhr.response )
     // console.log(xhr.response, xhr.status);
+    if (xhr.status === 403) {
+      const detail = xhr.response.detail;
+      if (detail === "Authentication credentials were not provided.") {
+        window.location.href = "/login?showLoginRequired=true";
+      }
+    }
     callback(xhr.response, xhr.status);
   };
 
   xhr.onerror = (e) => {
-    console.log(e);
+    console.log("error", e);
     callback({message: "The request was an error"}, 400);
   };
 
