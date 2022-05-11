@@ -18,34 +18,25 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from tweets.views import (
     tweets_list_view, 
     tweets_detail_view, 
-    tweets_profile_view,
-)
-from accounts.views import (
-    login_view,
-    logout_view,
-    register_view
 )
 
 
 urlpatterns = [
+    path("", tweets_list_view, name="homePage"),
+    path("<int:tweet_id>", tweets_detail_view, name="tweet-detail"),
+
+    re_path(r"profiles?/", include("profiles.urls")),
+    path("", include("accounts.urls")),
     path("api/tweets/", include("tweets.api.urls")),
     path('admin/', admin.site.urls),
 
-    path("", tweets_list_view, name="homePage"),
-    path("<int:tweet_id>", tweets_detail_view, name="tweet-detail"),
-    path("profile/<str:username>", tweets_profile_view, name="tweet-profile"),
-
     path("react/", TemplateView.as_view(template_name="tweets/react_via_django.html")),
     # path("react/", TemplateView.as_view(template_name="tweets/react.html")),
-
-    path("login/", login_view, name="login"),
-    path("logout/", logout_view, name="logout"),
-    path("register/", register_view, name="register")
 ]
 
 if settings.DEBUG:
