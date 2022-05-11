@@ -52,8 +52,8 @@ INSTALLED_APPS = [
     'rest_framework',
     
     # internal
-    'profiles',
     'accounts',
+    'profiles',
     'tweets',
 
 ]
