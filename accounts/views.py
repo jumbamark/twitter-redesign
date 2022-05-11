@@ -35,9 +35,14 @@ def register_view(request, *args, **kwargs):
     if form.is_valid():
         user = form.save(commit=True)
         user.set_password(form.cleaned_data.get("password1"))
+        # send confirmation email to verify their account
+        login(request, user)
         # print(form.cleaned_data)
         # username = form.cleaned_data.get("username")
-        return redirect("/")
+        # create my user
+        # User.objects.create(username=username)
+        #  user.set_password(form.cleaned_data.get("password2"))
+        return redirect("/login")
     context = {
         "Form": form,
         "btn_label": "Register",
