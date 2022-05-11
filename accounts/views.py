@@ -37,11 +37,6 @@ def register_view(request, *args, **kwargs):
         user.set_password(form.cleaned_data.get("password1"))
         # send confirmation email to verify their account
         login(request, user)
-        # print(form.cleaned_data)
-        # username = form.cleaned_data.get("username")
-        # create my user
-        # User.objects.create(username=username)
-        #  user.set_password(form.cleaned_data.get("password2"))
         return redirect("/login")
     context = {
         "Form": form,
