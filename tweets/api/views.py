@@ -131,7 +131,7 @@ def tweet_create_view_pure_django(request, *args, **kwargs):
     if form.errors:
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse(form.errors, status=400)
-    return render(request, "tweets/components/tweet_create_form.html", context={"Form": form})
+    return render(request, "tweets/components/tweet_create_form.html", context={"form": form})
 
 # view that lists tweets based on the serialize method in models
 def tweets_list_view_pure_django(request, *args,**kwargs):
