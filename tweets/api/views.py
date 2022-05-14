@@ -40,8 +40,11 @@ def tweets_list_view(request, *args, **kwargs):
 def tweets_feed_view(request, *args, **kwargs):
     user = request.user
     profiles = user.following.all()
-    followed_users_id = [x.user.id for x in profiles].append(user.id)
-    queryset = Tweet.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")
+    followed_users_ids = []
+    if profiles.exists():
+        followed_users_ids = [x.user.id for x in profiles]
+    followed_users_ids.append(user.id)
+    queryset = Tweet.objects.filter(user__id__in=followed_users_ids).order_by("-timestamp")
     serializer = TweetSerializer(queryset, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
