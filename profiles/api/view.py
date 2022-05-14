@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.shortcuts import render, redirect
-from django.http import HttpReponse, Http404, JsonResponse
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,7 +12,7 @@ from ..models import Profile
 User = get_user_model()
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def user_follow_view(request, username, *args, **kwargs):
     current_user = request.user
@@ -22,9 +21,19 @@ def user_follow_view(request, username, *args, **kwargs):
         return Response({"error": "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
     user_to_follow = user_to_follow_qs.first()
     profile = user_to_follow.profile
-    if current_user in profile.followers.all():
+    data = {}
+    try:
+        data = request.data
+    except:
+        pass
+    # data = request.data or {}
+    print(data)
+    action = data.get("action")
+    if action == "follow":
+        profile.followers.add(current_user)
+    elif action == "unfollow":
         profile.followers.remove(current_user)
     else:
-        profile.followers.add(current_user)
-    return Response({"followers":profile.followers.all()}, status=status.HTTP_400_BAD_REQUEST)
-
+        pass
+    current_followers_qs = profile.followers.all()
+    return Response({"followers": current_followers_qs.count()}, status=status.HTTP_200_OK)

@@ -31,9 +31,10 @@ urlpatterns = [
     path("<int:tweet_id>", tweets_detail_view, name="tweet-detail"),
 
     path('admin/', admin.site.urls),
-    path("api/tweets/", include("tweets.api.urls")),
     path("", include("accounts.urls")),
     re_path(r"profiles?/", include("profiles.urls")),
+    path("api/tweets/", include("tweets.api.urls")),
+    re_path(r"api/profiles?/", include("profiles.api.urls")),
 
     path("react/", TemplateView.as_view(template_name="tweets/react_via_django.html")),
     # path("react/", TemplateView.as_view(template_name="tweets/react.html")),
