@@ -17,6 +17,9 @@ ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 def user_follow_view(request, username, *args, **kwargs):
     current_user = request.user
     user_to_follow_qs = User.objects.filter(username=username)
+    if current_user.username == username:
+        my_followers = current_user.profile.followers.all()
+        return Response({"count": my_followers.count(), "message": "You cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
     if user_to_follow_qs.exists() == False:   #if not user_to_follow.qs.exists
         return Response({"error": "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
     user_to_follow = user_to_follow_qs.first()
