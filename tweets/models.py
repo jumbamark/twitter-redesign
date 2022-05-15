@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.db.models import Q
 
 # Referencing a built-in django feature for the User model
 User = settings.AUTH_USER_MODEL
@@ -10,6 +11,18 @@ class TweetLike(models.Model):
     tweet = models.ForeignKey("Tweet", on_delete=models.CASCADE)  # tweet that was liked
     timestamp = models.DateTimeField(auto_now_add=True) # time the tweet was liked
 
+# model manager
+class TweetQuerySet(models.QuerySet):
+    def feed(self, user):
+        profiles_exists = user.following.exists()
+        followed_users_ids = []
+        if profiles_exists:
+            followed_users_ids = user.following.values_list("user__id", flat=True)
+        return self.filter(Q(user__id__in=followed_users_ids) | Q(user = user)).distinct().order_by("-timestamp")
+class TweetManager(models.Manager):
+    def get_queryset(self, *args, **Kwargs):
+        return TweetQuerySet(self.model, using=self._db)
+
 # Create your models here.
 class Tweet(models.Model):
     # id = models.AutoField(primary_key=True)
@@ -19,6 +32,8 @@ class Tweet(models.Model):
     content = models.TextField(blank=True, null=True)
     image = models.FileField(upload_to="images/", blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    objects = TweetManager()
     
     def __str__(self):
         return str(self.content)

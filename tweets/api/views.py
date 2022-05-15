@@ -10,7 +10,6 @@ from rest_framework.permissions import IsAuthenticated
 from ..serializers import TweetCreateSerializer, TweetSerializer, TweetActionSerializer
 from ..models import Tweet
 from ..forms import TweetForm
-from django.db.models import Q
 
 
 # tweet create view based on serializers
@@ -40,11 +39,7 @@ def tweets_list_view(request, *args, **kwargs):
 @permission_classes([IsAuthenticated])
 def tweets_feed_view(request, *args, **kwargs):
     user = request.user
-    profiles_exists = user.following.exists()
-    followed_users_ids = []
-    if profiles_exists:
-        followed_users_ids = user.following.values_list("user__id", flat=True)
-    queryset = Tweet.objects.filter(Q(user__id__in=followed_users_ids) | Q(user = user)).distinct().order_by("-timestamp")
+    queryset = Tweet.objects.all().feed(user)
     serializer = TweetSerializer(queryset, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
