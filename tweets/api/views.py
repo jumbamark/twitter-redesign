@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 from ..serializers import TweetCreateSerializer, TweetSerializer, TweetActionSerializer
 from ..models import Tweet
 from ..forms import TweetForm
@@ -38,11 +39,14 @@ def tweets_list_view(request, *args, **kwargs):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def tweets_feed_view(request, *args, **kwargs):
+    paginator = PageNumberPagination()
+    paginator.page_size = 10
     user = request.user
     queryset = Tweet.objects.feed(user)
-    serializer = TweetSerializer(queryset, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
+    paginated_qs = paginator.paginate_queryset(queryset, request)
+    serializer = TweetSerializer(paginated_qs, many=True)
+    # return Response(serializer.data, status=status.HTTP_200_OK)
+    return paginator.get_paginated_response(serializer.data)
 
 # tweet_detail_view based on serializers
 @api_view(['GET'])
