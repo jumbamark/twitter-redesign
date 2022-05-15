@@ -13,6 +13,9 @@ class TweetLike(models.Model):
 
 # model manager
 class TweetQuerySet(models.QuerySet):
+    def by_username(self, username):
+        return self.filter(user__username__iexact=username)
+        
     def feed(self, user):
         profiles_exists = user.following.exists()
         followed_users_ids = []
@@ -22,6 +25,10 @@ class TweetQuerySet(models.QuerySet):
 class TweetManager(models.Manager):
     def get_queryset(self, *args, **Kwargs):
         return TweetQuerySet(self.model, using=self._db)
+
+    # calling the TweetQuerySet feed itself
+    def feed(self, user):
+        return self.get_queryset().feed(user)
 
 # Create your models here.
 class Tweet(models.Model):

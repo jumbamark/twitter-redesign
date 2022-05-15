@@ -30,7 +30,7 @@ def tweets_list_view(request, *args, **kwargs):
     queryset = Tweet.objects.all()
     username = request.GET.get("username") # ?username=mark
     if username != None:
-        queryset = queryset.filter(user__username__iexact=username)
+        queryset = queryset.by_username(username)
     serializer = TweetSerializer(queryset, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -39,7 +39,7 @@ def tweets_list_view(request, *args, **kwargs):
 @permission_classes([IsAuthenticated])
 def tweets_feed_view(request, *args, **kwargs):
     user = request.user
-    queryset = Tweet.objects.all().feed(user)
+    queryset = Tweet.objects.feed(user)
     serializer = TweetSerializer(queryset, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
