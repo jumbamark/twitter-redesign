@@ -50,8 +50,7 @@ function TweetsList(props) {
             const handleTweetListLookup = (response, status) => {
                 // console.log(response, status);
                 if (status === 200) {
-                    setNextUrl(response.next)
-                    // const newTweets = [...tweets].concat(response.results)
+                    setNextUrl(response.next);
                     setTweetsInit(response.results);
                     setTweetsDidSet(true);
                 } else {
@@ -77,8 +76,9 @@ function TweetsList(props) {
             console.log()
             if (status === 200) {
                 setNextUrl(response.next);
-                setTweetsInit(response.results);
-                setTweets(response.results);
+                const newTweets = [...tweets].concat(response.results);
+                setTweetsInit(newTweets);
+                setTweets(newTweets);
             } else {
                 alert("There was an error");
             }
