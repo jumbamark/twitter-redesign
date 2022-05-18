@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from django.conf import settings
 from .models import Tweet
+from profiles.serializers import PublicProfileSerializer
 
 MAX_TWEET_LENGTH = settings.MAX_TWEET_LENGTH
 TWEET_ACTION_OPTIONS = settings.TWEET_ACTION_OPTIONS
 class TweetCreateSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField(read_only=True)
+    user = PublicProfileSerializer(source='user.profile', read_only=True) #serializers.SerializerMethodField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Tweet
@@ -18,9 +19,6 @@ class TweetCreateSerializer(serializers.ModelSerializer):
         if len(value) > MAX_TWEET_LENGTH:
             raise serializers.ValidationError("This tweet is too long")
         return value
-
-    def get_user(self, obj):
-        return obj.user.id
 
 class TweetActionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -36,7 +34,7 @@ class TweetActionSerializer(serializers.Serializer):
 
 # Read only serializer because of retweeting
 class TweetSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField(read_only=True)
+    user = PublicProfileSerializer(source='user.profile', read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
     parent = TweetCreateSerializer(read_only=True)
     class Meta:
@@ -45,6 +43,3 @@ class TweetSerializer(serializers.ModelSerializer):
 
     def get_likes(self, obj):
         return obj.likes.count()
-    
-    def get_user(self, obj):
-        return obj.user.id
