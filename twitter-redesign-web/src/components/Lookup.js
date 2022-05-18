@@ -71,10 +71,13 @@ const apiTweetAction = (tweetId, action, callback) => {
     lookup("POST", "tweets/action/",callback, data);
 }
 
-const apiTweetList = function (username, callback) {
+const apiTweetList = function (username, callback, nextUrl) {
   let endpoint = "tweets/";
   if (username) {
     endpoint = `tweets/?username=${username}`;
+  }
+  if (nextUrl !== null && nextUrl !== undefined) {
+    endpoint = nextUrl.replace("http://127.0.0.1:8000/api/", "");
   }
   lookup("GET", endpoint, callback);
 };

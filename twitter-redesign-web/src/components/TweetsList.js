@@ -51,6 +51,7 @@ function TweetsList(props) {
                 // console.log(response, status);
                 if (status === 200) {
                     setNextUrl(response.next)
+                    // const newTweets = [...tweets].concat(response.results)
                     setTweetsInit(response.results);
                     setTweetsDidSet(true);
                 } else {
@@ -70,12 +71,29 @@ function TweetsList(props) {
         setTweets(updateFinalTweets);
     }
 
+    const handleLoadNext = (event) => {
+        event.preventDefault();
+        const handleLoadNextResponse = (response, status) => {
+            console.log()
+            if (status === 200) {
+                setNextUrl(response.next);
+                setTweetsInit(response.results);
+                setTweets(response.results);
+            } else {
+                alert("There was an error");
+            }
+        }
+        if (nextUrl !== null) {
+            apiTweetList(props.username, handleLoadNextResponse, nextUrl)
+        }
+    }
+
     return (
         <>
             {tweets.map((tweet, index) => {
                 return <Tweet tweet={tweet} didRetweet={handleDidRetweet} key={`${index}-{tweet.id}`}/>
             })}
-            {nextUrl !== null && <button className="btn btn-outline-primary mb-4">Load Next</button>}
+            {nextUrl !== null && <button onClick={handleLoadNext} className="btn btn-outline-primary mb-4">Load Next</button>}
         </>
     )
 }
