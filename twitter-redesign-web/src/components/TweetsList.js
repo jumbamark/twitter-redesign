@@ -34,6 +34,7 @@ function TweetsList(props) {
     // console.log(props.newTweets);
     const [tweetsInit, setTweetsInit] = useState([]);
     const [tweets, setTweets] = useState([]);
+    const [nextUrl, setNextUrl] = useState([])
     const [tweetsDidSet, setTweetsDidSet] = useState(false);
 
     // Temporary tweets
@@ -49,7 +50,8 @@ function TweetsList(props) {
             const handleTweetListLookup = (response, status) => {
                 // console.log(response, status);
                 if (status === 200) {
-                    setTweetsInit(response);
+                    setNextUrl(response.next)
+                    setTweetsInit(response.results);
                     setTweetsDidSet(true);
                 } else {
                     alert("There was an error");
@@ -69,11 +71,12 @@ function TweetsList(props) {
     }
 
     return (
-        <div>
+        <>
             {tweets.map((tweet, index) => {
                 return <Tweet tweet={tweet} didRetweet={handleDidRetweet} key={`${index}-{tweet.id}`}/>
             })}
-        </div>
+            {nextUrl !== null && <button className="btn btn-outline-primary mb-4">Load Next</button>}
+        </>
     )
 }
 
