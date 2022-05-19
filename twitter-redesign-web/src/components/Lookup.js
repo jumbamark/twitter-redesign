@@ -46,7 +46,10 @@ const lookup = (method, endpoint, callback, data) => {
     if (xhr.status === 403) {
       const detail = xhr.response.detail;
       if (detail === "Authentication credentials were not provided.") {
-        window.location.href = "/login?showLoginRequired=true";
+        // If login is in the url don't keep refreshing
+        if (window.location.href.indexOf("login") === -1) {
+          window.location.href = "/login?showLoginRequired=true";
+        }
       }
     }
     callback(xhr.response, xhr.status);
@@ -86,5 +89,12 @@ const apiTweetDetail = (tweetId, callback) => {
   lookup("GET", `tweets/${tweetId}/`, callback);
 }
 
+const apiTweetFeed = (callback, nextUrl) => {
+  let endpoint = "tweets/feed/";
+  if (nextUrl !== null && nextUrl !== undefined) {
+    endpoint = nextUrl.replace("http://127.0.0:8000/api/", "")
+  }
+  lookup("GET", endpoint, callback);
+}
 
-export {apiTweetCreate, apiTweetAction, apiTweetList, apiTweetDetail};
+export {apiTweetCreate, apiTweetAction, apiTweetList, apiTweetDetail, apiTweetFeed};
