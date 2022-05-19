@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {apiTweetAction} from "./Lookup";
+import {UserPicture, UserDisplay} from "./Profile"
 
 function ActionBtn(props) {
     const {tweet, action, didPerformAction} = props
@@ -59,19 +60,19 @@ function Tweet(props) {
       <div className={className}>
         {isRetweet === true && (
           <div className="div mb-2">
-            <span className="small text-muted">Retweet by @{retweeter.username}</span>
+            <span className="small text-muted">
+              Retweet by <UserDisplay user={retweeter} />{" "}
+            </span>
           </div>
         )}
         <div className="d-flex">
           <div className=" ">
-            <span className="mx-1 px-3 py-2 rounded-circle bg-dark text-white">
-              {tweet.user.first_name[0]}
-            </span>
+            <UserPicture user={tweet.user} />
           </div>
           <div className="col-11">
             <div>
               <p>
-                {tweet.user.first_name} {tweet.user.last_name} @{tweet.user.username}
+                <UserDisplay includeFullName user={tweet.user} />
               </p>
               <p>{tweet.content}</p>
               <ParentTweet tweet={tweet} retweeter={tweet.user} />
