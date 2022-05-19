@@ -21,13 +21,15 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from tweets.views import (
+    home_view,
     tweets_list_view, 
     tweets_detail_view, 
 )
 
 
 urlpatterns = [
-    path("", tweets_list_view, name="homePage"),
+    path("", home_view, name="homePage"),
+    path("global/", tweets_list_view, name="all-tweets"),
     path("<int:tweet_id>", tweets_detail_view, name="tweet-detail"),
 
     path('admin/', admin.site.urls),

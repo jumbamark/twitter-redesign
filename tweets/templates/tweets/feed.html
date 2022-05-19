@@ -1,0 +1,18 @@
+{% extends 'tweets/base.html' %}
+
+{% load static %}
+
+{% block title %}
+Twitter Redesign | Home
+{% endblock title%}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<div id="tweets-feed"></div>
+{% else %}
+<div id="tweets"></div>
+{% endif %}
+
+<script src="{% static 'tweets/js/home.js' %}"></script>
+{% endblock content %}
