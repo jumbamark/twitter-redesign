@@ -15,14 +15,14 @@ function Tweets(props) {
   };
 
   return (
-    <div className="container text-center">
+    <>
       <div className="row my-3">
         {canTweet === true && (
           <TweetCreate didTweet={handleNewTweet}/>
         )}
       </div>
       <TweetsList newTweets={newTweets} {...props}/>
-    </div>
+    </>
   );
 }
 
