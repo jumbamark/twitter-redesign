@@ -101,4 +101,9 @@ const apiProfileDetail = (username, callback) => {
   lookup("GET", `profiles/${username}`, callback);
 };
 
-export {apiTweetCreate, apiTweetAction, apiTweetList, apiTweetDetail, apiTweetFeed, apiProfileDetail};
+const apiProfileFollowToggle = (username, action, callback) => {
+  const data = {action: `${action && action}`.toLowerCase()}
+  lookup("POST", `profiles/${username}/follow/`, callback, data);
+}
+
+export {apiTweetCreate, apiTweetAction, apiTweetList, apiTweetDetail, apiTweetFeed, apiProfileDetail, apiProfileFollowToggle};
