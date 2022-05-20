@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import Tweets from './components/Tweets';
 import Feeds from "./components/Feeds";
 import {TweetDetail} from './components/TweetsList';
+import ProfileBadge from './components/ProfileBadge'
 
 const root = document.getElementById("root");
 if (root) {
@@ -33,6 +34,11 @@ const tweetsFeedEl = document.getElementById("tweets-feed");
 if (tweetsFeedEl) {
   createRoot(tweetsFeedEl).render(e(Feeds, tweetsFeedEl.dataset));
 }
+
+const userProfileBadgeElements = document.querySelectorAll(".profile-badge");
+userProfileBadgeElements.forEach((container) => {
+  createRoot(container).render(e(ProfileBadge, container.dataset));
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -97,4 +97,8 @@ const apiTweetFeed = (callback, nextUrl) => {
   lookup("GET", endpoint, callback);
 }
 
-export {apiTweetCreate, apiTweetAction, apiTweetList, apiTweetDetail, apiTweetFeed};
+const apiProfileDetail = (username, callback) => {
+  lookup("GET", `profiles/${username}`, callback);
+};
+
+export {apiTweetCreate, apiTweetAction, apiTweetList, apiTweetDetail, apiTweetFeed, apiProfileDetail};
