@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import {apiProfileDetail} from "./Lookup";
+import {apiProfileDetail, apiProfileFollowToggle} from "./Lookup";
 import {UserDisplay, UserPicture} from "./Profile"
-import {apiProfileFollowToggle} from "./Lookup"
+import numeral from 'numeral'
+
+function DisplayCount(props) {
+  return <span className={props.className}>{numeral(props.children).format("0a")}</span>
+}
 
 const Badge = ({user, didFollowToggle, profileLoading}) => {
   // console.log(user);
@@ -19,6 +23,10 @@ const Badge = ({user, didFollowToggle, profileLoading}) => {
     <div>
       <UserPicture user={user} hideLink/>
       <p><UserDisplay user={user} includeFullName hideLink/> </p>
+      <p><DisplayCount>{user.follower_count}</DisplayCount> {user.follower_count === 1 ? "Follower" : "Followers"} </p>
+      <p>{numeral(user.following_count).format("0a")} Following</p>
+      <p>{user.location}</p>
+      <p>{user.bio}</p>
       <button onClick={handleFollowToggle} className="btn btn-primary">{currentFollowStatus}</button>
     </div>
   ) : null;
