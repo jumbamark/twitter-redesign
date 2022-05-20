@@ -67,7 +67,7 @@ function Tweet(props) {
         )}
         <div className="d-flex">
           <div className=" ">
-            <UserPicture user={tweet.user} />
+            <UserPicture user={tweet.user} hideLink />
           </div>
           <div className="col-11">
             <div>
